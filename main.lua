@@ -8,17 +8,7 @@ local Camera = require "camera"
 
 function love.load()
   rover = Rover:new(love.graphics.getWidth() / 2, love.graphics.getHeight() / 2)
-
-  map = Map:new(50,50,4)
-
-  -- tiles = {}
-  -- for x = 1,100 do
-  --   tiles[x] = {}
-  --   for y = 1,100 do
-  --     tiles[x][y] = {x = x, y = y, c = {226/255, 123/255, 88/255, love.math.random(20,80)/100}}
-  --   end
-  -- end
-
+  map = Map:new(20,20,50)
 end
 
 function love.update(dt)
@@ -43,43 +33,18 @@ function love.update(dt)
     rover.y = rover.y - 5
     rover.r = 0
   end
- camera.x = rover.x - love.graphics.getWidth() / 2 + 30
- camera.y = rover.y - love.graphics.getHeight() / 2 + 50
+ camera.x = (rover.x + (rover.w/2)) - (love.graphics.getWidth()/2)
+ camera.y = (rover.y + (rover.h/2)) - (love.graphics.getHeight()/2)
 end
 
 function love.draw()
   camera:set()
-  love.graphics.rectangle("fill", 20, 20, 30, 30)
-  -- for x = 1,100 do
-  --   for y = 1,100 do
-  --     love.graphics.setColor(tiles[x][y].c)
-  --     love.graphics.rectangle("fill", (tiles[x][y].x - 1)*40, (tiles[x][y].y - 1)*40, 40, 40)
-  --   end
-  -- end
   map:draw()
   rover:draw()
   camera:unset()
 end
 
 
-
-
--- function Move(key)
---
---   if key == "d" then
---     rover.x = rover.x + 10
---   end
---   if key == "s" then
---     rover.y = rover.y + 10
---   end
---   if key == "a" then
---     rover.x = rover.x - 10
---   end
---   if key == "w" then
---     rover.y = rover.y - 10
---   end
---
--- end
 
 
 -- function love.keypressed(key, scancode, isrepeat)

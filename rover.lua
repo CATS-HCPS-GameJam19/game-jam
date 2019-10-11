@@ -5,8 +5,9 @@ Rover = class('Rover')
 function Rover:initialize(x, y)
   self.x = x
   self.y = y
-  self.w = 8
-  self.h = 8
+  self.s = 2.5
+  self.w = 32 * self.s
+  self.h = 32 * self.s
   self.r = 0
   self.img = love.graphics.newImage('sprites/Curiosity Mars.png')
 end
@@ -19,7 +20,7 @@ end
 
 function Rover:draw()
   love.graphics.setColor(1,1,1)
-  love.graphics.draw(self.img, (self.x), (self.y), self.r, 2, 2, 16, 16)
+  love.graphics.draw(self.img, (self.x), (self.y), self.r, self.s, self.s, 16, 16)
 end
 
 return Rover
