@@ -13,16 +13,18 @@ end
 
 function love.update(dt)
   if love.keyboard.isDown("d") then
-    rover.x = rover.x + 10
+    rover.x = rover.x + 5
+
   end
   if love.keyboard.isDown("s") then
-    rover.y = rover.y + 10
+    rover.y = rover.y + 5
+    rover.r = math.pi
   end
   if love.keyboard.isDown("a") then
-    rover.x = rover.x - 10
+    rover.x = rover.x - 5
   end
   if love.keyboard.isDown("w") then
-    rover.y = rover.y - 10
+    rover.y = rover.y - 5
   end
  camera.x = (rover.x + (rover.w/2)) - (love.graphics.getWidth()/2)
  camera.y = (rover.y + (rover.h/2)) - (love.graphics.getHeight()/2)
