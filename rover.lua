@@ -7,7 +7,7 @@ function Rover:initialize(x, y)
   self.y = y
   self.w = 16
   self.h = 16
-  self.img = love.graphics.newImage('diggin boy.png')
+  self.img = love.graphics.newImage('sprites/diggin boy.png')
 end
 
 function Rover:update(dt)
@@ -16,7 +16,7 @@ end
 
 function Rover:draw()
   love.graphics.setColor(1,1,1)
-  love.graphics.draw(self.img, (self.x-1)*40, (self.y-1)*40, 0, 0.25)
+  love.graphics.draw(self.img, (self.x), (self.y), 0, 0.25)
 end
 
 return Rover
