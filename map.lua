@@ -2,12 +2,23 @@ local class = require 'middleclass'
 
 Map = class('Map')
 
-function Map:initialize(x, y)
+function Map:initialize(w,h,s)
   self.x = 0
   self.y = 0
-  self.w = love.graphics.getWidth()
-  self.h = love.graphics.getHeight()
-  self.img = love.graphics.newImage('sprites/diggin boy.png')
+  self.w = w
+  self.h = h
+  self.s = s
+  self.img = love.graphics.newImage('sprites/Mars Background.png')
+  self.imgw = 32 * self.s
+  self.imgh = 32 * self.s
+
+  self.tiles = {}
+  for x = 1,self.w do
+    self.tiles[x] = {}
+    for y = 1,self.h do
+      self.tiles[x][y] = {x = x, y = y}
+    end
+  end
 end
 
 function Map:update(dt)
@@ -15,8 +26,12 @@ function Map:update(dt)
 end
 
 function Map:draw()
-  love.graphics.setColor(226/255, 123/255, 88/255)
-  love.graphics.draw(self.img, (self.x), (self.y), 0, 0.25)
+  for x = 1,self.w do
+    for y = 1,self.h do
+      love.graphics.setColor(1,1,1)
+      love.graphics.draw(self.img, (self.tiles[x][y].x - 1)*self.imgw, (self.tiles[x][y].y - 1)*self.imgh, 0, self.s)
+    end
+  end
 end
 
-return Rover
+return Map
