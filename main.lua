@@ -2,7 +2,7 @@
 -- Carlo Mehegan, Austin Spitzer, Thomas Shulgan, Stella Alexiou
 -- October 11, 2019
 
-local Boy = require 'boy'
+local Rover = require 'rover'
 
 function love.load()
   x = 100

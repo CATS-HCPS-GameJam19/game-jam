@@ -1,8 +1,8 @@
 local class = require 'middleclass'
 
-Boy = class('Boy')
+Rover = class('Rover')
 
-function Boy:initialize(x, y)
+function Rover:initialize(x, y)
   self.x = x
   self.y = y
   self.w = 16
@@ -10,13 +10,13 @@ function Boy:initialize(x, y)
   self.img = love.graphics.newImage('diggin boy.png')
 end
 
-function Boy:update(dt)
+function Rover:update(dt)
   -- none
 end
 
-function Boy:draw()
+function Rover:draw()
   love.graphics.setColor(1,1,1)
   love.graphics.draw(self.img, (self.x-1)*40, (self.y-1)*40, 0, 0.25)
 end
 
-return Boy
+return Rover
