@@ -13,13 +13,8 @@ end
 
 function love.update(dt)
   if love.keyboard.isDown("d") then
-<<<<<<< HEAD
-    rover.r = rover.r - .04
-=======
-    -- rover.x = rover.x + 5
     rover.r = rover.r - .08
 
->>>>>>> 02cd25972cf2ef395d79911d7d01c80558225eb9
   end
   if love.keyboard.isDown("s") then
     rover.y = rover.y - math.sin(rover.r - math.pi/2) * 1.5
@@ -27,12 +22,7 @@ function love.update(dt)
 
   end
   if love.keyboard.isDown("a") then
-<<<<<<< HEAD
-    rover.r = rover.r + .04
-=======
-    -- rover.x = rover.x - 5
     rover.r = rover.r + .08
->>>>>>> 02cd25972cf2ef395d79911d7d01c80558225eb9
   end
   if love.keyboard.isDown("w") then
     rover.y = rover.y + math.sin(rover.r - math.pi/2) * 1.5
