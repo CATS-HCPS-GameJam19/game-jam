@@ -5,6 +5,14 @@ local Rover = require 'rover'
 Camera = require "camera"
 function love.load()
   rover = Rover:new(100,100)
+
+  tiles = {}
+  for x = 1,100 do
+    tiles[x] = {}
+    for y = 1,100 do
+      tiles[x][y] = {x = x, y = y, c = {226/255, 123/255, 88/255, love.math.random(20,80)/100}}
+    end
+  end
 end
 
 function love.update(dt)
