@@ -19,7 +19,7 @@ end
 
 function Rover:draw()
   love.graphics.setColor(1,1,1)
-  love.graphics.draw(self.img, (self.x), (self.y), self.r, 2)
+  love.graphics.draw(self.img, (self.x), (self.y), self.r, 2, 2, 16, 16)
 end
 
 return Rover
