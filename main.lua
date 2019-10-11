@@ -1,12 +1,14 @@
 -- 2019 HCPSxJMU Game Jam
 -- Carlo Mehegan, Austin Spitzer, Thomas Shulgan, Stella Alexiou
 -- October 11, 2019
-<<<<<<< HEAD
+love.graphics.setDefaultFilter('nearest', 'nearest')
 local Rover = require 'rover'
 local Map = require 'map'
 local Camera = require "camera"
+
 function love.load()
-  rover = Rover:new(100,100)
+  rover = Rover:new(love.graphics.getWidth() / 2, love.graphics.getHeight() / 2)
+
   map = Map:new(50,50,4)
 
   -- tiles = {}
@@ -16,13 +18,6 @@ function love.load()
   --     tiles[x][y] = {x = x, y = y, c = {226/255, 123/255, 88/255, love.math.random(20,80)/100}}
   --   end
   -- end
-=======
-love.graphics.setDefaultFilter('nearest', 'nearest')
-local rover = require 'rover'
-Camera = require "camera"
-function love.load()
-  rover = Rover:new(love.graphics.getWidth() / 2, love.graphics.getHeight() / 2)
->>>>>>> de3fefe5a73ca884c8946c9afcb1541602559a24
 
 end
 
