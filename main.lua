@@ -2,7 +2,7 @@
 -- Carlo Mehegan, Austin Spitzer, Thomas Shulgan, Stella Alexiou
 -- October 11, 2019
 local Rover = require 'rover'
-
+Camera = require "camera"
 function love.load()
   rover = Rover:new(100,100)
 end
@@ -20,10 +20,14 @@ function love.update(dt)
   if love.keyboard.isDown("w") then
     rover.y = rover.y - 10
   end
+camera:movementUpdate(dt)
 end
 
 function love.draw()
+  camera:set()
+  love.graphics.rectangle("fill", 20, 20, 30, 30)
   rover:draw()
+  camera:unset()
 end
 
 
