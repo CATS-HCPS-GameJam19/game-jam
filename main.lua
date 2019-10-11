@@ -2,15 +2,16 @@
 -- Carlo Mehegan, Austin Spitzer, Thomas Shulgan, Stella Alexiou
 -- October 11, 2019
 
+local Boy = require 'boy'
 
-function love.load(arg)
-  -- body...
+function love.load()
+  x = 100
 end
 
 function love.update(dt)
-  -- body...
+  x = x+10*dt
 end
 
 function love.draw()
-  -- body...
+  love.graphics.circle("fill", x, 200, 10)
 end
