@@ -1,10 +1,11 @@
 -- 2019 HCPSxJMU Game Jam
 -- Carlo Mehegan, Austin Spitzer, Thomas Shulgan, Stella Alexiou
 -- October 11, 2019
-local Rover = require 'rover'
+love.graphics.setDefaultFilter('nearest', 'nearest')
+local rover = require 'rover'
 Camera = require "camera"
 function love.load()
-  rover = Rover:new(100,100)
+  rover = Rover:new(love.graphics.getWidth() / 2, love.graphics.getHeight() / 2)
 
   tiles = {}
   for x = 1,100 do
@@ -28,7 +29,8 @@ function love.update(dt)
   if love.keyboard.isDown("w") then
     rover.y = rover.y - 10
   end
-camera:movementUpdate(dt)
+ camera.x = rover.x - love.graphics.getWidth() / 2 + 30
+ camera.y = rover.y - love.graphics.getHeight() / 2 + 50
 end
 
 function love.draw()
