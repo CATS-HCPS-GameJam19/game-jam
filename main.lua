@@ -19,9 +19,11 @@ end
 function love.update(dt)
   if love.keyboard.isDown("d") then
     rover.x = rover.x + 10
+
   end
   if love.keyboard.isDown("s") then
     rover.y = rover.y + 10
+    rover.r = math.pi 
   end
   if love.keyboard.isDown("a") then
     rover.x = rover.x - 10
