@@ -12,24 +12,20 @@ function love.load()
 end
 
 function love.update(dt)
-
-
   if love.keyboard.isDown("d") then
-    -- rover.x = rover.x + 5
-    rover.r = rover.r - .125
-
+    rover.r = rover.r - .04
   end
   if love.keyboard.isDown("s") then
-    rover.y = rover.y + 5
-    rover.r = math.pi
+    rover.y = rover.y - math.sin(rover.r - math.pi/2) * 1.5
+    rover.x = rover.x - math.cos(rover.r - math.pi/2) * 1.5
+
   end
   if love.keyboard.isDown("a") then
-    -- rover.x = rover.x - 5
-    rover.r = rover.r + .125
+    rover.r = rover.r + .04
   end
   if love.keyboard.isDown("w") then
-    rover.y = rover.y - 5
-    rover.r = 0
+    rover.y = rover.y + math.sin(rover.r - math.pi/2) * 1.5
+    rover.x = rover.x + math.cos(rover.r - math.pi/2) * 1.5
   end
  camera.x = (rover.x + (rover.w/2)) - (love.graphics.getWidth()/2)
  camera.y = (rover.y + (rover.h/2)) - (love.graphics.getHeight()/2)
