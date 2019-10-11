@@ -5,8 +5,11 @@ love.graphics.setDefaultFilter('nearest', 'nearest')
 local Rover = require 'rover'
 local Map = require 'map'
 local Camera = require "camera"
+local Mineral = require 'mineral'
 
 function love.load()
+  mineral = Mineral:new(100, 100);
+  m2 = Mineral:new(50, 50)
   rover = Rover:new(love.graphics.getWidth() / 2, love.graphics.getHeight() / 2)
   map = Map:new(20,20,50)
 end
@@ -36,6 +39,8 @@ function love.draw()
   camera:set()
   map:draw()
   rover:draw()
+  mineral:draw()
+  m2:draw()
   camera:unset()
 end
 
