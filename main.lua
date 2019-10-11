@@ -5,6 +5,14 @@ local Rover = require 'rover'
 
 function love.load()
   rover = Rover:new(100,100)
+
+  tiles = {}
+  for x = 1,100 do
+    tiles[x] = {}
+    for y = 1,100 do
+      tiles[x][y] = {x = x, y = y, c = {226/255, 123/255, 88/255, love.math.random(20,80)/100}}
+    end
+  end
 end
 
 function love.update(dt)
@@ -23,6 +31,12 @@ function love.update(dt)
 end
 
 function love.draw()
+  for x = 1,100 do
+    for y = 1,100 do
+      love.graphics.setColor(tiles[x][y].c)
+      love.graphics.rectangle("fill", (tiles[x][y].x - 1)*40, (tiles[x][y].y - 1)*40, 40, 40)
+    end
+  end
   rover:draw()
 end
 
