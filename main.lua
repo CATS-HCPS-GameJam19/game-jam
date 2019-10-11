@@ -12,9 +12,7 @@ function love.load()
 end
 
 function love.update(dt)
-  if love.keyboard.isDown("escape") then
-    love.event.quit()
-  end
+
 
   if love.keyboard.isDown("d") then
     -- rover.x = rover.x + 5
@@ -47,18 +45,8 @@ end
 
 
 
--- function love.keypressed(key, scancode, isrepeat)
-
---   if key == "d" then
---     Move("d")
---   end
---   if key == "s" then
---     Move("s")
---   end
---   if key == "a" then
---     Move("a")
---   end
---   if key == "w" then
---     Move("w")
---   end
--- end
+function love.keypressed(key, scancode, isrepeat)
+  if key == "escape" then
+    love.event.quit()
+  end
+end
