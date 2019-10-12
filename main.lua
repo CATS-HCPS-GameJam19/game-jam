@@ -31,14 +31,14 @@ function love.load()
 end
 
 function love.update(dt)
-  battery:update(-0.05)
+  battery:charge(-0.05)
   if love.keyboard.isDown("d") then
     rover.r = rover.r + .08
   end
   if love.keyboard.isDown("s") then
     rover.y = rover.y - math.sin(rover.r - math.pi/2) * 1.5
     rover.x = rover.x - math.cos(rover.r - math.pi/2) * 1.5
-    battery:update(-0.25)
+    battery:charge(-0.25)
   end
   if love.keyboard.isDown("a") then
     rover.r = rover.r - .08
@@ -46,7 +46,7 @@ function love.update(dt)
   if love.keyboard.isDown("w") then
     rover.y = rover.y + math.sin(rover.r - math.pi/2) * 1.5
     rover.x = rover.x + math.cos(rover.r - math.pi/2) * 1.5
-    battery:update(-0.25)
+    battery:charge(-0.25)
   end
   battery.x = rover.x  - (love.graphics.getWidth()/2) + 30
   battery.y = rover.y  - (love.graphics.getHeight()/2) + 30
@@ -54,6 +54,7 @@ function love.update(dt)
   camera.y = rover.y  - (love.graphics.getHeight()/2)
   camera:checkBorderCollision(map)
   rover:update(dt,map)
+  battery:update(dt)
 end
 
 
@@ -72,8 +73,9 @@ function love.draw()
   for i = 1, #redMineral do
     redMineral[i]:draw()
   end
-  camera:unset()
   battery:draw()
+  camera:unset()
+
 end
 
 

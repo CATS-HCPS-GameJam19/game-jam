@@ -13,8 +13,17 @@ function Battery:initialize()
   self.maxe = 1000
 end
 
---used to change the battery's charge
 function Battery:update(num)
+  if self.x < 30 then
+    self.x = 30
+  end
+  if self.y < 30 then
+    self.y = 30
+  end
+end
+
+--used to change the battery's charge
+function Battery:charge(num)
   if num > 0 then
     if self.e + num > self.maxe then
       self.e = self.maxe
