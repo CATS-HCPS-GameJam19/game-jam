@@ -155,6 +155,7 @@ function love.update(dt)
   else
     gameover = true
     gameoveralpha = gameoveralpha + 1
+  end
 end
 
 
@@ -186,6 +187,9 @@ function love.draw()
   end
   camera:unset()
 end
+
+
+
 function FindProximity(x,y)
   x0 = (x - rover.x)^2
   y0 = (y - rover.y)^2
