@@ -8,8 +8,11 @@ local Camera = require "camera"
 local Mineral = require 'mineral'
 local Battery = require 'battery'
 local Hub = require "hub"
+local Talkies = require('talkies')
 
 function love.load()
+  Talkies.font = love.graphics.newFont("INSERT FILE", 32)
+   Talkies.say("NASA", "Hello, Curiosity! Welcome to Mars!--The goal of your misson is to collect as many minerals as possible and upgrade yourself to survive.")
   blueMineral = {}
   for i = 1, 1500 do
     blueMineral[i] = Mineral:new('sprites/Blue mineral.png')
@@ -24,6 +27,7 @@ function love.load()
   for i = 1, 1100 do
     redMineral[i] = Mineral:new('sprites/red mineral.png')
   end
+
   Mars = love.graphics.newImage("Sprites/Mars Background.png")
   rover = Rover:new(1500, 1000)
   map = Map:new(20,20,50)
@@ -33,6 +37,7 @@ function love.load()
 end
 
 function love.update(dt)
+  Talkies.update(dt)
   if insideHub == false then
     battery:charge(-0.05)
     if love.keyboard.isDown("d") then
@@ -116,7 +121,9 @@ function love.draw()
   hub:draw()
   rover:draw()
   battery:draw()
+
   camera:unset()
+  Talkies.draw()
 end
 function FindProximity(x,y)
   x0 = (x - rover.x)^2
@@ -127,5 +134,12 @@ end
 function love.keypressed(key, scancode, isrepeat)
   if key == "escape" then
     love.event.quit()
+  end
+  if key == "tab" then
+    Talkies.clearMessages()
+  end
+  if key == "space" then Talkies.onAction()
+  elseif key == "up" then Talkies.prevOption()
+  elseif key == "down" then Talkies.nextOption()
   end
 end
