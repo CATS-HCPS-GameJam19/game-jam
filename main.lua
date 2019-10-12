@@ -8,8 +8,20 @@ local Camera = require "camera"
 local Mineral = require 'mineral'
 local Battery = require 'battery'
 local Hub = require "hub"
+local Talkies = require('talkies')
 
 function love.load()
+  Bluem = love.graphics.newImage("sprites/Blue mineral.png")
+  Redm = love.graphics.newImage("sprites/red mineral.png")
+  Purplem = love.graphics.newImage("sprites/Puprple mineral.png")
+  Talkies.font = love.graphics.newFont("nimbusmono-regular.otf", 30)
+  local firstdialog = Talkies.say("NASA", "Hello, Curiosity! Welcome to Mars!--The goal of your mission:--collect as many minerals as possible and upgrade yourself to survive.")
+  local seconddialog = Talkies.say("NASA", "The battery bar you see on the top of your screen shows you how much power you have left until you die.")
+  local thirddialog = Talkies.say("NASA", "To charge your battery, view the map, and store your minerals, enter The Hub located to the bottom left of your current position.")
+  firstdialog:isShown()
+  seconddialog:isShown()
+  thirddialog:isShown()
+
   blueMineral = {}
   for i = 1, 1500 do
     blueMineral[i] = Mineral:new('sprites/Blue mineral.png')
@@ -24,6 +36,7 @@ function love.load()
   for i = 1, 1100 do
     redMineral[i] = Mineral:new('sprites/red mineral.png')
   end
+
   Mars = love.graphics.newImage("Sprites/Mars Background.png")
   rover = Rover:new(1500, 1000)
   map = Map:new(20,20,50)
@@ -34,10 +47,40 @@ function love.load()
   insideCharge2 = false
   hub = Hub:new(1000,1000)
   battery = Battery:new()
+  bmcount = 0
+  pmcount = 0
+  rmcount = 0
 end
 
 function love.update(dt)
   if battery.e >0 then
+    for i = 1, #blueMineral do
+      bm = blueMineral[i]
+      if FindProximity(bm.x+(bm.w/2),bm.y+(bm.h/2)) < 30 and bm.broken == false
+       then
+        bmcount = bmcount + 1
+        bm.broken = true
+      end
+    end
+    for i = 1, #purpleMineral do
+        pm = purpleMineral[i]
+        if FindProximity(pm.x+(pm.w/2),pm.y+(pm.h/2)) < 30 and pm.broken == false
+         then
+          pmcount = pmcount + 1
+          pm.broken = true
+        end
+      end
+      for i = 1, #redMineral do
+          rm = redMineral[i]
+          if FindProximity(rm.x+(rm.w/2),rm.y+(rm.h/2)) < 30 and rm.broken == false
+           then
+            rmcount = rmcount + 1
+            rm.broken = true
+        end
+      end
+
+
+    Talkies.update(dt)
     if insideHub == false then
       battery:charge(-0.05)
       if love.keyboard.isDown("d") then
@@ -177,16 +220,30 @@ function love.draw()
       redMineral[i]:draw()
     end
   end
+
   hub:draw()
   rover:draw()
   battery:draw()
 
+<<<<<<< HEAD
+=======
   if gameover == true then
     love.graphics.setColor(0, 0, 0, gameoveralpha/100)
     love.graphics.rectangle("fill", camera.x, camera.y, love.graphics.getWidth(), love.graphics.getHeight())
   end
+<<<<<<< HEAD
   map:drawMini()
+=======
+>>>>>>> 51a17dc860aa75e3b200ee46671258b26f6aa319
+>>>>>>> 17cb56d8e6ae01c03745f6bb0be36817892e6a56
   camera:unset()
+  Talkies.draw()
+  love.graphics.draw(Bluem, 450, 10)
+  love.graphics.draw(Redm, 650, 10)
+  love.graphics.draw(Purplem, 550, 10)
+  love.graphics.print(bmcount, 500, 10)
+  love.graphics.print(pmcount, 600, 10)
+  love.graphics.print(rmcount, 700, 10)
 end
 
 
@@ -200,5 +257,12 @@ end
 function love.keypressed(key, scancode, isrepeat)
   if key == "escape" then
     love.event.quit()
+  end
+  if key == "tab" then
+    Talkies.clearMessages()
+  end
+  if key == "space" then Talkies.onAction()
+  elseif key == "up" then Talkies.prevOption()
+  elseif key == "down" then Talkies.nextOption()
   end
 end
