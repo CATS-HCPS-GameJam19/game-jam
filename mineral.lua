@@ -2,13 +2,11 @@ local class = require 'middleclass'
 
 Mineral = class('Mineral')
 
-function Mineral:initialize(x, y)
-  self.x = x
-  self.y = y
-  self.img = love.graphics.newImage('sprites/Blue mineral.png')
+function Mineral:initialize(img)
+  self.x = love.math.random(0, 32000)
+  self.y = love.math.random(0, 32000)
+  self.img = love.graphics.newImage(img)
 end
-
-
 
 function Mineral:update(dt)
   -- none

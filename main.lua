@@ -10,9 +10,21 @@ local Battery = require 'battery'
 
 
 function love.load()
+  blueMineral = {}
+  for i = 1, love.math.random(500, 510) do
+    blueMineral[i] = Mineral:new('sprites/Blue mineral.png')
+  end
+
+  purpleMineral = {}
+  for i = 1, love.math.random(300, 310) do
+    purpleMineral[i] = Mineral:new('sprites/puprple mineral.png')
+  end
+
+  redMineral = {}
+  for i = 1, love.math.random(100, 110) do
+    redMineral[i] = Mineral:new('sprites/red mineral.png')
+  end
   Mars = love.graphics.newImage("Sprites/Mars Background.png")
-  mineral = Mineral:new(100, 100);
-  m2 = Mineral:new(50, 50)
   rover = Rover:new(love.graphics.getWidth() / 2, love.graphics.getHeight() / 2)
   map = Map:new(20,20,50)
   battery = Battery:new()
@@ -49,10 +61,19 @@ function love.draw()
   camera:set()
   map:draw()
   rover:draw()
-  mineral:draw()
-  m2:draw()
-  battery:draw()
+  for i = 1, #blueMineral do
+    blueMineral[i]:draw()
+  end
+
+  for i = 1, #purpleMineral do
+    purpleMineral[i]:draw()
+  end
+
+  for i = 1, #redMineral do
+    redMineral[i]:draw()
+  end
   camera:unset()
+  battery:draw()
 end
 
 
