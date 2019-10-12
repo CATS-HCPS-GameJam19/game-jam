@@ -50,11 +50,11 @@ function camera:checkBorderCollision(map)
   if camera.y < 0 then
     camera.y = 0
   end
-  if camera.x > map.width - map.tilewidth then
-    camera.x = map.width - map.tilewidth
+  if camera.x > map.w*map.imgw - love.graphics.getWidth() then
+    camera.x = map.w*map.imgw- love.graphics.getWidth()
   end
-  if camera.y > map.height - map.tileheight then
-    camera.y = map.height - map.tileheight
+  if camera.y > map.h*map.imgh - love.graphics.getHeight() then
+    camera.y = map.h*map.imgh- love.graphics.getHeight()
   end
 end
 

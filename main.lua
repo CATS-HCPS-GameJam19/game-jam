@@ -7,11 +7,13 @@ local Map = require 'map'
 local Camera = require "camera"
 
 function love.load()
+  Mars = love.graphics.newImage("Sprites/Mars Background.png")
   rover = Rover:new(love.graphics.getWidth() / 2, love.graphics.getHeight() / 2)
   map = Map:new(20,20,50)
 end
 
 function love.update(dt)
+
   if love.keyboard.isDown("d") then
     rover.r = rover.r + .08
 
@@ -30,7 +32,10 @@ function love.update(dt)
   end
  camera.x = (rover.x + (rover.w/2)) - (love.graphics.getWidth()/2)
  camera.y = (rover.y + (rover.h/2)) - (love.graphics.getHeight()/2)
+ camera:checkBorderCollision(map)
+ rover:update(dt,map)
 end
+
 
 function love.draw()
   camera:set()
