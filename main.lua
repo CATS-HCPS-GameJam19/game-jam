@@ -28,6 +28,8 @@ function love.load()
   rover = Rover:new(1500, 1000)
   map = Map:new(20,20,50)
   insideHub = false
+  insideCharge1 = false
+  insideCharge2 = false
   hub = Hub:new(1000,1000)
   battery = Battery:new()
 end
@@ -74,7 +76,8 @@ function love.update(dt)
     camera.y = -300
   end
 
- if rover.x >= 240 + hub.x and
+  -- going into the hub
+  if rover.x >= 240 + hub.x and
     rover.x <= 240 + 45 + hub.x and
     rover.y >= 110 + hub.y  and
     rover.y <= 110 + 95 + hub.y
@@ -84,6 +87,7 @@ function love.update(dt)
     rover.y = 200
   end
 
+  -- leaving the hub
   if insideHub == true then
     if rover.x >= -800 and
        rover.x <= -800 + 400 and
@@ -96,15 +100,44 @@ function love.update(dt)
      end
   end
 
-  battery.x = rover.x  - (love.graphics.getWidth()/2) + 30
-  battery.y = rover.y  - (love.graphics.getHeight()/2) + 30
+  -- charging on the charge pad, using two different rectangles
+  if insideHub == true then
+    if rover.x + rover.w >= 124 -1000 and
+      rover.x <= 124 + 107 -1000 and
+      rover.y + rover.h >= 431 -300 and
+      rover.y <= 431 + 75 -300
+    then
+      insideCharge1 = true
+    else
+      insideCharge1 = false
+    end
+
+    if rover.x >= 36 -1000 and
+      rover.x <= 36 + 107 -1000 and
+      rover.y >= 522 -300 and
+      rover.y <= 522 + 75 -300
+    then
+      insideCharge2 = true
+    else
+      insideCharge2 = false
+    end
+
+    if insideCharge1 == true or insideCharge2 == true then
+      battery.x = -1000 + 30
+      battery.y = -300 + 30
+      battery:charge(1)
+    end
+  end
+
+
 
   if insideHub == false then
     rover:update(dt,map)
     camera:checkBorderCollision(map)
+    battery.x = rover.x  - (love.graphics.getWidth()/2) + 30
+    battery.y = rover.y  - (love.graphics.getHeight()/2) + 30
+    battery:update(dt)
   end
-
-  battery:update(dt)
 end
 
 
