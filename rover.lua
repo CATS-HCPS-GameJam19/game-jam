@@ -33,6 +33,7 @@ end
 
 function Rover:draw()
   love.graphics.setColor(1,1,1)
+  --love.graphics.print(self.x..", "..self.y, self.x, self.y)
   print(self.x)
   print(self.y)
   if insideHub == true then
