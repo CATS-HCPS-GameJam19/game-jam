@@ -33,22 +33,37 @@ function love.load()
 end
 
 function love.update(dt)
-  battery:charge(-0.05)
-  if love.keyboard.isDown("d") then
-    rover.r = rover.r + .08
-  end
-  if love.keyboard.isDown("s") then
-    rover.y = rover.y - math.sin(rover.r - math.pi/2) * 1.5
-    rover.x = rover.x - math.cos(rover.r - math.pi/2) * 1.5
-    battery:charge(-0.25)
-  end
-  if love.keyboard.isDown("a") then
-    rover.r = rover.r - .08
-  end
-  if love.keyboard.isDown("w") then
-    rover.y = rover.y + math.sin(rover.r - math.pi/2) * 1.5
-    rover.x = rover.x + math.cos(rover.r - math.pi/2) * 1.5
-    battery:charge(-0.25)
+  if insideHub == false then
+    battery:charge(-0.05)
+    if love.keyboard.isDown("d") then
+      rover.r = rover.r + .08
+    end
+    if love.keyboard.isDown("s") then
+      rover.y = rover.y - math.sin(rover.r - math.pi/2) * 1.5
+      rover.x = rover.x - math.cos(rover.r - math.pi/2) * 1.5
+      battery:charge(-0.25)
+    end
+    if love.keyboard.isDown("a") then
+      rover.r = rover.r - .08
+    end
+    if love.keyboard.isDown("w") then
+      rover.y = rover.y + math.sin(rover.r - math.pi/2) * 1.5
+      rover.x = rover.x + math.cos(rover.r - math.pi/2) * 1.5
+      battery:charge(-0.25)
+    end
+  elseif insideHub == true then
+    if love.keyboard.isDown("d") then
+      rover.x = rover.x + 2
+    end
+    if love.keyboard.isDown("s") then
+      rover.y = rover.y + 2
+    end
+    if love.keyboard.isDown("a") then
+      rover.x = rover.x - 2
+    end
+    if love.keyboard.isDown("w") then
+      rover.y = rover.y - 2
+    end
   end
 
   if insideHub == false then
@@ -65,7 +80,7 @@ function love.update(dt)
     rover.y <= 110 + 95
   then
     insideHub = true
-    rover.x = -400
+    rover.x = -600
   end
 
   battery.x = rover.x  - (love.graphics.getWidth()/2) + 30
