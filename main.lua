@@ -159,7 +159,6 @@ end
 
 
 function love.draw()
-
   camera:set()
   map:draw()
   for i = 1, #blueMineral do
