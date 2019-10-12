@@ -11,17 +11,17 @@ local Hub = require "hub"
 
 function love.load()
   blueMineral = {}
-  for i = 1, love.math.random(500, 510) do
+  for i = 1, 1500 do
     blueMineral[i] = Mineral:new('sprites/Blue mineral.png')
   end
 
   purpleMineral = {}
-  for i = 1, love.math.random(300, 310) do
+  for i = 1, 1300 do
     purpleMineral[i] = Mineral:new('sprites/puprple mineral.png')
   end
 
   redMineral = {}
-  for i = 1, love.math.random(100, 110) do
+  for i = 1, 1100 do
     redMineral[i] = Mineral:new('sprites/red mineral.png')
   end
   Mars = love.graphics.newImage("Sprites/Mars Background.png")
@@ -77,26 +77,31 @@ end
 function love.draw()
   camera:set()
   map:draw()
+  for i = 1, #blueMineral do
+    if FindProximity(blueMineral[i].x,blueMineral[i].y) < 1000 then
+      blueMineral[i]:draw()
+    end
+  end
+  for i = 1, #purpleMineral do
+    if FindProximity(purpleMineral[i].x,purpleMineral[i].y) < 1000 then
+      purpleMineral[i]:draw()
+    end
+  end
+  for i = 1, #redMineral do
+    if FindProximity(redMineral[i].x,redMineral[i].y) < 1000 then
+      redMineral[i]:draw()
+    end
+  end
   hub:draw()
   rover:draw()
-  for i = 1, #blueMineral do
-    blueMineral[i]:draw()
-  end
-
-  for i = 1, #purpleMineral do
-    purpleMineral[i]:draw()
-  end
-
-  for i = 1, #redMineral do
-    redMineral[i]:draw()
-  end
   battery:draw()
   camera:unset()
-
 end
-
-
-
+function FindProximity(x,y)
+  x0 = (x - rover.x)^2
+  y0 = (y - rover.y)^2
+  return math.sqrt(x0+y0)
+end
 
 function love.keypressed(key, scancode, isrepeat)
   if key == "escape" then
