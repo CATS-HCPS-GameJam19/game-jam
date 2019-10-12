@@ -7,7 +7,7 @@ local Map = require 'map'
 local Camera = require "camera"
 local Mineral = require 'mineral'
 local Battery = require 'battery'
-
+local Hub = require "hub"
 
 function love.load()
   blueMineral = {}
@@ -27,6 +27,7 @@ function love.load()
   Mars = love.graphics.newImage("Sprites/Mars Background.png")
   rover = Rover:new(love.graphics.getWidth() / 2, love.graphics.getHeight() / 2)
   map = Map:new(20,20,50)
+  hub = Hub:new(20,20)
   battery = Battery:new()
 end
 
@@ -48,10 +49,25 @@ function love.update(dt)
     rover.x = rover.x + math.cos(rover.r - math.pi/2) * 1.5
     battery:charge(-0.25)
   end
+
+  if insideHub == false then
+    camera.x = rover.x  - (love.graphics.getWidth()/2)
+    camera.y = rover.y  - (love.graphics.getHeight()/2)
+  else
+  camera.x = 90
+  camera.y = 90
+  end
+
+ if rover.x >= 240 and
+    rover.x <= 240 + 45 and
+    rover.y >= 110 and
+    rover.y <= 110 + 95
+  then
+    insideHub = true
+  end
+
   battery.x = rover.x  - (love.graphics.getWidth()/2) + 30
   battery.y = rover.y  - (love.graphics.getHeight()/2) + 30
-  camera.x = rover.x  - (love.graphics.getWidth()/2)
-  camera.y = rover.y  - (love.graphics.getHeight()/2)
   camera:checkBorderCollision(map)
   rover:update(dt,map)
   battery:update(dt)
@@ -61,6 +77,7 @@ end
 function love.draw()
   camera:set()
   map:draw()
+  hub:draw()
   rover:draw()
   for i = 1, #blueMineral do
     blueMineral[i]:draw()
