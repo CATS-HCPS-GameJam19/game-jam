@@ -12,7 +12,6 @@ function love.load()
 end
 
 function love.update(dt)
-
   if love.keyboard.isDown("d") then
     rover.r = rover.r + .08
 
@@ -34,14 +33,13 @@ function love.update(dt)
 end
 
 function love.draw()
-  print(love.timer.getTime())
   camera:set()
-  love.graphics.setColor(0,0,0, (math.sin(love.timer.getTime() / 1000)/2+1)*255)
-  love.graphics.rectangle("fill", 0, 0, love.graphics.getWidth(),love.graphics.getHeight())
   map:draw()
   rover:draw()
   camera:unset()
 end
+
+
 
 
 function love.keypressed(key, scancode, isrepeat)
