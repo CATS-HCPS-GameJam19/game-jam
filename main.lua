@@ -10,6 +10,7 @@ local Battery = require 'battery'
 
 
 function love.load()
+  Mars = love.graphics.newImage("Sprites/Mars Background.png")
   mineral = Mineral:new(100, 100);
   m2 = Mineral:new(50, 50)
   rover = Rover:new(love.graphics.getWidth() / 2, love.graphics.getHeight() / 2)
