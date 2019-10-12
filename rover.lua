@@ -37,7 +37,7 @@ function Rover:draw()
   print(self.x)
   print(self.y)
   if insideHub == true then
-    love.graphics.draw(self.back, self.x, self.y, 0, 4)
+    love.graphics.draw(self.back, self.x, self.y, 0, 5)
   elseif insideHub == false then
     love.graphics.draw(self.img, (self.x), (self.y), self.r, self.s, self.s, 16, 16)
   end

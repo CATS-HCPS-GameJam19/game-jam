@@ -100,6 +100,7 @@ function love.update(dt)
         battery:charge(-0.25)
       end
     elseif insideHub == true then
+      
       if love.keyboard.isDown("d") then
         rover.x = rover.x + 2
       end
@@ -225,13 +226,10 @@ function love.draw()
   rover:draw()
   battery:draw()
 
-<<<<<<< HEAD
-=======
   if gameover == true then
     love.graphics.setColor(0, 0, 0, gameoveralpha/100)
     love.graphics.rectangle("fill", camera.x, camera.y, love.graphics.getWidth(), love.graphics.getHeight())
   end
->>>>>>> 51a17dc860aa75e3b200ee46671258b26f6aa319
   camera:unset()
   Talkies.draw()
   love.graphics.draw(Bluem, 450, 10)
