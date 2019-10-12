@@ -80,7 +80,20 @@ function love.update(dt)
     rover.y <= 110 + 95 + hub.y
   then
     insideHub = true
-    rover.x = -600
+    rover.x = -650
+    rover.y = 200
+  end
+
+  if insideHub == true then
+    if rover.x >= -800 and
+       rover.x <= -800 + 400 and
+       rover.y >= 236 and
+       rover.y <= 236 + 128
+     then
+       insideHub = false
+       rover.x = hub.x + 400
+       rover.y = hub.y + 200
+     end
   end
 
   battery.x = rover.x  - (love.graphics.getWidth()/2) + 30
