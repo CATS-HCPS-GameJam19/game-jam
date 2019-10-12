@@ -11,6 +11,8 @@ local Hub = require "hub"
 local Talkies = require('talkies')
 
 function love.load()
+  love.window.setMode(1200, 800)
+  love.window.setTitle("Curious Curiosity")
   Bluem = love.graphics.newImage("sprites/Blue mineral.png")
   Redm = love.graphics.newImage("sprites/red mineral.png")
   Purplem = love.graphics.newImage("sprites/Puprple mineral.png")
@@ -79,24 +81,24 @@ function love.update(dt)
         end
       end
 
-
     Talkies.update(dt)
+
     if insideHub == false then
       battery:charge(-0.05)
       if love.keyboard.isDown("d") then
         rover.r = rover.r + .08
       end
       if love.keyboard.isDown("s") then
-        rover.y = rover.y - math.sin(rover.r - math.pi/2) * 1.5
-        rover.x = rover.x - math.cos(rover.r - math.pi/2) * 1.5
+        rover.y = rover.y - math.sin(rover.r - math.pi/2) * 1.5 * 10
+        rover.x = rover.x - math.cos(rover.r - math.pi/2) * 1.5 * 10
         battery:charge(-0.25)
       end
       if love.keyboard.isDown("a") then
         rover.r = rover.r - .08
       end
       if love.keyboard.isDown("w") then
-        rover.y = rover.y + math.sin(rover.r - math.pi/2) * 1.5
-        rover.x = rover.x + math.cos(rover.r - math.pi/2) * 1.5
+        rover.y = rover.y + math.sin(rover.r - math.pi/2) * 1.5 * 10
+        rover.x = rover.x + math.cos(rover.r - math.pi/2) * 1.5 * 10
         battery:charge(-0.25)
       end
     elseif insideHub == true then
@@ -118,8 +120,8 @@ function love.update(dt)
       camera.x = rover.x  - (love.graphics.getWidth()/2)
       camera.y = rover.y  - (love.graphics.getHeight()/2)
     else
-      camera.x = -1000
-      camera.y = -300
+      camera.x = -1200
+      camera.y = -400
     end
 
    if rover.x >= 240 + hub.x and
@@ -193,6 +195,8 @@ function love.update(dt)
     battery.x = rover.x  - (love.graphics.getWidth()/2) + 30
     battery.y = rover.y  - (love.graphics.getHeight()/2) + 30
     battery:update(dt)
+    map.miniX = rover.x  - (love.graphics.getWidth()/2) + love.graphics.getWidth() - 175
+    map.miniY = rover.y  - (love.graphics.getHeight()/2) + love.graphics.getHeight() - 175
   end
 
   else
@@ -224,13 +228,14 @@ function love.draw()
   hub:draw()
   rover:draw()
   battery:draw()
+  map:drawMini()
 
   if gameover == true then
     love.graphics.setColor(0, 0, 0, gameoveralpha/100)
     love.graphics.rectangle("fill", camera.x, camera.y, love.graphics.getWidth(), love.graphics.getHeight())
   end
 
-  map:drawMini()
+
 
   camera:unset()
   Talkies.draw()
