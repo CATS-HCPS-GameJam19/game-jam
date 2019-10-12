@@ -225,17 +225,13 @@ function love.draw()
   rover:draw()
   battery:draw()
 
-<<<<<<< HEAD
-=======
   if gameover == true then
     love.graphics.setColor(0, 0, 0, gameoveralpha/100)
     love.graphics.rectangle("fill", camera.x, camera.y, love.graphics.getWidth(), love.graphics.getHeight())
   end
-<<<<<<< HEAD
+
   map:drawMini()
-=======
->>>>>>> 51a17dc860aa75e3b200ee46671258b26f6aa319
->>>>>>> 17cb56d8e6ae01c03745f6bb0be36817892e6a56
+
   camera:unset()
   Talkies.draw()
   love.graphics.draw(Bluem, 450, 10)
