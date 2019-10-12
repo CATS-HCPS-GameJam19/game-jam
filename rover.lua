@@ -12,6 +12,7 @@ function Rover:initialize(x, y)
   self.img = love.graphics.newImage('sprites/Curiosity Hub.png')
   self.e = 1000
   self.back = love.graphics.newImage("sprites/backside of rover.png")
+  self.speed = 1.5
 end
 
 
@@ -37,7 +38,7 @@ function Rover:draw()
   print(self.x)
   print(self.y)
   if insideHub == true then
-    love.graphics.draw(self.back, self.x, self.y, 0, 6)
+    love.graphics.draw(self.back, self.x, self.y, 0, 5)
   elseif insideHub == false then
     love.graphics.draw(self.img, (self.x), (self.y), self.r, self.s, self.s, 16, 16)
   end

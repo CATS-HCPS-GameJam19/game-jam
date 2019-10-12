@@ -11,15 +11,19 @@ local Hub = require "hub"
 local Talkies = require('talkies')
 
 function love.load()
+  love.window.setMode(1200, 800)
+  love.window.setTitle("Curious Curiosity")
   Bluem = love.graphics.newImage("sprites/Blue mineral.png")
   Redm = love.graphics.newImage("sprites/red mineral.png")
   Purplem = love.graphics.newImage("sprites/Puprple mineral.png")
   Talkies.font = love.graphics.newFont("nimbusmono-regular.otf", 30)
-  local firstdialog = Talkies.say("NASA", "Hello, Curiosity! Welcome to Mars! (press the space bar to continue)--The goal of your mission:--collect as many minerals as possible and survive.")
+  
+  local firstdialog = Talkies.say("NASA", "Hello, Curiosity! Welcome to Mars! (press the space bar to continue)--The goal of your mission:--collect all the minerals in this sector and take them to the hub to upgrade yourself.")
   local seconddialog = Talkies.say("NASA", "The battery bar you see on the top of your screen shows you how much power you have left until you die.")
   local thirddialog = Talkies.say("NASA", "Also, as you collect minerals, the mineral counter located at the top right of your screen will increase.")
-  local fourthdialog = Talkies.say("NASA", "To charge your battery, view the map, and store your minerals, enter The Hub located to the bottom left of your current position.")
+  local fourthdialog = Talkies.say("NASA", "To charge your battery, view the map, and store your minerals, enter The Hub located to the bottom left of your current position. Minerals are automatically spent to speed you up")
   local fifthdialog = Talkies.say("NASA", "Move using the w, a, s, and d keys.")
+
   firstdialog:isShown()
   seconddialog:isShown()
   thirddialog:isShown()
@@ -42,7 +46,7 @@ function love.load()
   end
 
   Mars = love.graphics.newImage("Sprites/Mars Background.png")
-  rover = Rover:new(1500, 1000)
+  rover = Rover:new(7200, 6700)
   map = Map:new(20,20,50)
   gameover = false
   gameoveralpha = 0
@@ -50,7 +54,7 @@ function love.load()
   insidehubtext = true
   insideCharge1 = false
   insideCharge2 = false
-  hub = Hub:new(1000,1000)
+  hub = Hub:new(6700,6700)
   battery = Battery:new()
   bmcount = 0
   pmcount = 0
@@ -84,32 +88,34 @@ function love.update(dt)
         end
       end
 
-
     Talkies.update(dt)
+
     if insideHub == false then
       battery:charge(-0.05)
       if love.keyboard.isDown("d") then
         rover.r = rover.r + .08
       end
       if love.keyboard.isDown("s") then
-        rover.y = rover.y - math.sin(rover.r - math.pi/2) * 1.5
-        rover.x = rover.x - math.cos(rover.r - math.pi/2) * 1.5
+        rover.y = rover.y - math.sin(rover.r - math.pi/2) * rover.speed
+        rover.x = rover.x - math.cos(rover.r - math.pi/2) * rover.speed
         battery:charge(-0.25)
       end
       if love.keyboard.isDown("a") then
         rover.r = rover.r - .08
       end
       if love.keyboard.isDown("w") then
-        rover.y = rover.y + math.sin(rover.r - math.pi/2) * 1.5
-        rover.x = rover.x + math.cos(rover.r - math.pi/2) * 1.5
+        rover.y = rover.y + math.sin(rover.r - math.pi/2) * rover.speed
+        rover.x = rover.x + math.cos(rover.r - math.pi/2) * rover.speed
         battery:charge(-0.25)
       end
     elseif insideHub == true then
+      
       if insidehubtext == true then
         local hubdialog = Talkies.say("NASA", "Welcome to The Hub! To your left, you will be able to charge your rover. This will also convert your collected minerals to upgrading your speed.")
         hubdialog:isShown()
         insidehubtext = false
       end
+      
       if love.keyboard.isDown("d") then
         rover.x = rover.x + 2
       end
@@ -130,8 +136,8 @@ function love.update(dt)
       camera.x = rover.x  - (love.graphics.getWidth()/2)
       camera.y = rover.y  - (love.graphics.getHeight()/2)
     else
-      camera.x = -1000
-      camera.y = -300
+      camera.x = -1200
+      camera.y = -400
     end
 
    if rover.x >= 240 + hub.x and
@@ -194,6 +200,18 @@ function love.update(dt)
       battery.x = -1000 + 30
       battery.y = -300 + 30
       battery:charge(1)
+      if bmcount > 0 then
+        rover.speed = rover.speed + (bmcount/10)
+        bmcount = 0
+      end
+      if pmcount > 0 then
+        rover.speed = rover.speed + (pmcount/10)
+        pmcount = 0
+      end
+      if rmcount > 0 then
+        rover.speed = rover.speed + (rmcount/10)
+        rmcount = 0
+      end
     end
   end
 
@@ -205,6 +223,8 @@ function love.update(dt)
     battery.x = rover.x  - (love.graphics.getWidth()/2) + 30
     battery.y = rover.y  - (love.graphics.getHeight()/2) + 30
     battery:update(dt)
+    map.miniX = rover.x  - (love.graphics.getWidth()/2) + love.graphics.getWidth() - 240--175
+    map.miniY = rover.y  - (love.graphics.getHeight()/2) + love.graphics.getHeight() - 240--175
   end
 
   else
@@ -236,11 +256,13 @@ function love.draw()
   hub:draw()
   rover:draw()
   battery:draw()
+  map:drawMini(rover)
 
   if gameover == true then
     love.graphics.setColor(0, 0, 0, gameoveralpha/100)
     love.graphics.rectangle("fill", camera.x, camera.y, love.graphics.getWidth(), love.graphics.getHeight())
   end
+
   camera:unset()
   Talkies.draw()
   love.graphics.draw(Bluem, 450, 10)
@@ -249,6 +271,8 @@ function love.draw()
   love.graphics.print(bmcount, 500, 10)
   love.graphics.print(pmcount, 600, 10)
   love.graphics.print(rmcount, 700, 10)
+  love.graphics.print("speed:", 1000, 10)
+  love.graphics.print(rover.speed, 1120, 10)
 end
 
 
