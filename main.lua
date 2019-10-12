@@ -25,10 +25,10 @@ function love.load()
     redMineral[i] = Mineral:new('sprites/red mineral.png')
   end
   Mars = love.graphics.newImage("Sprites/Mars Background.png")
-  rover = Rover:new(love.graphics.getWidth() / 2, love.graphics.getHeight() / 2)
+  rover = Rover:new(1500, 1000)
   map = Map:new(20,20,50)
   insideHub = false
-  hub = Hub:new(20,20)
+  hub = Hub:new(1000,1000)
   battery = Battery:new()
 end
 
@@ -74,10 +74,10 @@ function love.update(dt)
     camera.y = -300
   end
 
- if rover.x >= 240 and
-    rover.x <= 240 + 45 and
-    rover.y >= 110 and
-    rover.y <= 110 + 95
+ if rover.x >= 240 + hub.x and
+    rover.x <= 240 + 45 + hub.x and
+    rover.y >= 110 + hub.y  and
+    rover.y <= 110 + 95 + hub.y
   then
     insideHub = true
     rover.x = -600
