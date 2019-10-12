@@ -24,7 +24,7 @@ function love.load()
   for i = 1, love.math.random(100, 110) do
     redMineral[i] = Mineral:new('sprites/red mineral.png')
   end
-
+  Mars = love.graphics.newImage("Sprites/Mars Background.png")
   rover = Rover:new(love.graphics.getWidth() / 2, love.graphics.getHeight() / 2)
   map = Map:new(20,20,50)
   battery = Battery:new()
@@ -52,7 +52,10 @@ function love.update(dt)
   battery.y = rover.y  - (love.graphics.getHeight()/2) + 30
   camera.x = rover.x  - (love.graphics.getWidth()/2)
   camera.y = rover.y  - (love.graphics.getHeight()/2)
+  camera:checkBorderCollision(map)
+  rover:update(dt,map)
 end
+
 
 function love.draw()
   camera:set()

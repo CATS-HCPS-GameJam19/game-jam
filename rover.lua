@@ -15,8 +15,19 @@ end
 
 
 
-function Rover:update(dt)
-  -- none
+function Rover:update(dt,map)
+    if self.x < 0 then
+      self.x = 0
+    end
+    if self.y < 0 then
+      self.y = 0
+    end
+    if self.x > map.w*map.imgw - self.w then
+      self.x = map.w*map.imgw- self.w
+    end
+    if self.y > map.h*map.imgh - self.h then
+      self.y = map.h*map.imgh- self.h
+  end
 end
 
 function Rover:draw()
