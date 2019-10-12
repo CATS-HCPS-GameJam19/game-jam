@@ -27,6 +27,7 @@ function love.load()
   Mars = love.graphics.newImage("Sprites/Mars Background.png")
   rover = Rover:new(love.graphics.getWidth() / 2, love.graphics.getHeight() / 2)
   map = Map:new(20,20,50)
+  insideHub = false
   hub = Hub:new(20,20)
   battery = Battery:new()
 end
@@ -54,8 +55,8 @@ function love.update(dt)
     camera.x = rover.x  - (love.graphics.getWidth()/2)
     camera.y = rover.y  - (love.graphics.getHeight()/2)
   else
-  camera.x = 90
-  camera.y = 90
+    camera.x = -1000
+    camera.y = -300
   end
 
  if rover.x >= 240 and
@@ -64,12 +65,17 @@ function love.update(dt)
     rover.y <= 110 + 95
   then
     insideHub = true
+    rover.x = -400
   end
 
   battery.x = rover.x  - (love.graphics.getWidth()/2) + 30
   battery.y = rover.y  - (love.graphics.getHeight()/2) + 30
-  camera:checkBorderCollision(map)
-  rover:update(dt,map)
+
+  if insideHub == false then
+    rover:update(dt,map)
+    camera:checkBorderCollision(map)
+  end
+
   battery:update(dt)
 end
 
