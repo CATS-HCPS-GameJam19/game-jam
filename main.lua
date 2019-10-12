@@ -89,16 +89,16 @@ function love.update(dt)
         rover.r = rover.r + .08
       end
       if love.keyboard.isDown("s") then
-        rover.y = rover.y - math.sin(rover.r - math.pi/2) * 1.5
-        rover.x = rover.x - math.cos(rover.r - math.pi/2) * 1.5
+        rover.y = rover.y - math.sin(rover.r - math.pi/2) * rover.speed
+        rover.x = rover.x - math.cos(rover.r - math.pi/2) * rover.speed
         battery:charge(-0.25)
       end
       if love.keyboard.isDown("a") then
         rover.r = rover.r - .08
       end
       if love.keyboard.isDown("w") then
-        rover.y = rover.y + math.sin(rover.r - math.pi/2) * 1.5
-        rover.x = rover.x + math.cos(rover.r - math.pi/2) * 1.5
+        rover.y = rover.y + math.sin(rover.r - math.pi/2) * rover.speed
+        rover.x = rover.x + math.cos(rover.r - math.pi/2) * rover.speed
         battery:charge(-0.25)
       end
     elseif insideHub == true then
@@ -184,6 +184,18 @@ function love.update(dt)
       battery.x = -1000 + 30
       battery.y = -300 + 30
       battery:charge(1)
+      if bmcount > 0 then
+        rover.speed = rover.speed + (bmcount/10)
+        bmcount = 0
+      end
+      if pmcount > 0 then
+        rover.speed = rover.speed + (pmcount/10)
+        pmcount = 0
+      end
+      if rmcount > 0 then
+        rover.speed = rover.speed + (rmcount/10)
+        rmcount = 0
+      end
     end
   end
 
@@ -245,6 +257,8 @@ function love.draw()
   love.graphics.print(bmcount, 500, 10)
   love.graphics.print(pmcount, 600, 10)
   love.graphics.print(rmcount, 700, 10)
+  love.graphics.print("speed:", 1000, 10)
+  love.graphics.print(rover.speed, 1120, 10)
 end
 
 
