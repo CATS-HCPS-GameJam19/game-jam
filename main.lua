@@ -15,12 +15,16 @@ function love.load()
   Redm = love.graphics.newImage("sprites/red mineral.png")
   Purplem = love.graphics.newImage("sprites/Puprple mineral.png")
   Talkies.font = love.graphics.newFont("nimbusmono-regular.otf", 30)
-  local firstdialog = Talkies.say("NASA", "Hello, Curiosity! Welcome to Mars!--The goal of your mission:--collect as many minerals as possible and upgrade yourself to survive.")
+  local firstdialog = Talkies.say("NASA", "Hello, Curiosity! Welcome to Mars! (press the space bar to continue)--The goal of your mission:--collect as many minerals as possible and survive.")
   local seconddialog = Talkies.say("NASA", "The battery bar you see on the top of your screen shows you how much power you have left until you die.")
-  local thirddialog = Talkies.say("NASA", "To charge your battery, view the map, and store your minerals, enter The Hub located to the bottom left of your current position.")
+  local thirddialog = Talkies.say("NASA", "Also, as you collect minerals, the mineral counter located at the top right of your screen will increase.")
+  local fourthdialog = Talkies.say("NASA", "To charge your battery, view the map, and store your minerals, enter The Hub located to the bottom left of your current position.")
+  local fifthdialog = Talkies.say("NASA", "Move using the w, a, s, and d keys.")
   firstdialog:isShown()
   seconddialog:isShown()
   thirddialog:isShown()
+  fourthdialog:isShown()
+  fifthdialog:isShown()
 
   blueMineral = {}
   for i = 1, 1500 do
@@ -43,6 +47,7 @@ function love.load()
   gameover = false
   gameoveralpha = 0
   insideHub = false
+  insidehubtext = true
   insideCharge1 = false
   insideCharge2 = false
   hub = Hub:new(1000,1000)
@@ -100,6 +105,11 @@ function love.update(dt)
         battery:charge(-0.25)
       end
     elseif insideHub == true then
+      if insidehubtext == true then
+        local hubdialog = Talkies.say("NASA", "Welcome to The Hub! To your left, you will be able to charge your rover. At the front, you can view the full map. To your right, you can view your mineral storage and store.")
+        hubdialog:isShown()
+        insidehubtext = false
+      end
       if love.keyboard.isDown("d") then
         rover.x = rover.x + 2
       end
@@ -112,6 +122,8 @@ function love.update(dt)
       if love.keyboard.isDown("w") then
         rover.y = rover.y - 2
       end
+
+
     end
 
     if insideHub == false then
@@ -225,13 +237,10 @@ function love.draw()
   rover:draw()
   battery:draw()
 
-<<<<<<< HEAD
-=======
   if gameover == true then
     love.graphics.setColor(0, 0, 0, gameoveralpha/100)
     love.graphics.rectangle("fill", camera.x, camera.y, love.graphics.getWidth(), love.graphics.getHeight())
   end
->>>>>>> 51a17dc860aa75e3b200ee46671258b26f6aa319
   camera:unset()
   Talkies.draw()
   love.graphics.draw(Bluem, 450, 10)
