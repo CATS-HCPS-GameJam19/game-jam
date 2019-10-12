@@ -185,6 +185,7 @@ function love.draw()
     love.graphics.setColor(0, 0, 0, gameoveralpha/100)
     love.graphics.rectangle("fill", camera.x, camera.y, love.graphics.getWidth(), love.graphics.getHeight())
   end
+  map:drawMini()
   camera:unset()
 end
 

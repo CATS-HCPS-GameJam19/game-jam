@@ -12,6 +12,10 @@ function Map:initialize(w,h,s)
   self.imgw = 32 * self.s
   self.imgh = 32 * self.s
 
+  self.miniS = 1/4
+  self.miniW = 32 * self.miniS
+  self.miniH = 32 * self.miniS
+
   self.tiles = {}
   for x = 1,self.w do
     self.tiles[x] = {}
@@ -21,8 +25,16 @@ function Map:initialize(w,h,s)
   end
 end
 
-function Map:update(dt)
-  -- none
+function Map:updateMini(dt)
+
+end
+function Map:drawMini()
+  for x = 1,self.w do
+    for y = 1,self.h do
+      love.graphics.setColor(1,1,1)
+      love.graphics.draw(self.img,((self.tiles[x][y].x - 1)*self.miniW), ((self.tiles[x][y].y - 1)*self.miniH), 0, self.miniS)
+    end
+  end
 end
 
 function Map:draw()
