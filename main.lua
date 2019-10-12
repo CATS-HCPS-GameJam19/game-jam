@@ -106,7 +106,7 @@ function love.update(dt)
       end
     elseif insideHub == true then
       if insidehubtext == true then
-        local hubdialog = Talkies.say("NASA", "Welcome to The Hub! To your left, you will be able to charge your rover. At the front, you can view the full map. To your right, you can view your mineral storage and store.")
+        local hubdialog = Talkies.say("NASA", "Welcome to The Hub! To your left, you will be able to charge your rover. This will also convert your collected minerals to upgrading your speed.")
         hubdialog:isShown()
         insidehubtext = false
       end
