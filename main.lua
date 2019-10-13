@@ -1,7 +1,8 @@
 -- 2019 HCPSxJMU Game Jam
--- Carlo Mehegan, Austin Spitzer, Thomas Shulgan, Stella Alexiou
+-- Curious Curiosity
+-- by Carlo Mehegan, Austin Spitzer, Thomas Shulgan, Stella Alexiou
 -- October 11, 2019
-love.graphics.setDefaultFilter('nearest', 'nearest')
+
 local Rover = require 'rover'
 local Map = require 'map'
 local Camera = require "camera"
@@ -11,8 +12,9 @@ local Hub = require "hub"
 local Talkies = require('talkies')
 
 function love.load()
-  love.window.setMode(1200, 800)
-  love.window.setTitle("Curious Curiosity")
+  love.window.setMode(1200, 800) --sets size of window
+  love.graphics.setDefaultFilter('nearest', 'nearest') -- makes images not blurry
+  love.window.setTitle("Curious Curiosity") -- window title
   Bluem = love.graphics.newImage("sprites/Blue mineral.png")
   Redm = love.graphics.newImage("sprites/red mineral.png")
   Purplem = love.graphics.newImage("sprites/Puprple mineral.png")
@@ -66,27 +68,27 @@ function love.update(dt)
     for i = 1, #blueMineral do
       bm = blueMineral[i]
       if FindProximity(bm.x+(bm.w/2),bm.y+(bm.h/2)) < 30+(rover.speed*2) and bm.broken == false
-       then
+      then
         bmcount = bmcount + 1
         bm.broken = true
       end
     end
     for i = 1, #purpleMineral do
-        pm = purpleMineral[i]
-        if FindProximity(pm.x+(pm.w/2),pm.y+(pm.h/2)) < 30+(rover.speed*2) and pm.broken == false
-         then
-          pmcount = pmcount + 1
-          pm.broken = true
-        end
+      pm = purpleMineral[i]
+      if FindProximity(pm.x+(pm.w/2),pm.y+(pm.h/2)) < 30+(rover.speed*2) and pm.broken == false
+      then
+        pmcount = pmcount + 1
+        pm.broken = true
       end
-      for i = 1, #redMineral do
-          rm = redMineral[i]
-          if FindProximity(rm.x+(rm.w/2),rm.y+(rm.h/2)) < 30+(rover.speed*2) and rm.broken == false
-           then
-            rmcount = rmcount + 1
-            rm.broken = true
-        end
+    end
+    for i = 1, #redMineral do
+      rm = redMineral[i]
+      if FindProximity(rm.x+(rm.w/2),rm.y+(rm.h/2)) < 30+(rover.speed*2) and rm.broken == false
+      then
+        rmcount = rmcount + 1
+        rm.broken = true
       end
+    end
 
     Talkies.update(dt)
 
@@ -109,13 +111,11 @@ function love.update(dt)
         battery:charge(-0.25)
       end
     elseif insideHub == true then
-
       if insidehubtext == true then
         local hubdialog = Talkies.say("NASA", "Welcome to The Hub! To your left, you will be able to charge your rover. This will also convert your collected minerals to upgrading your speed.")
         hubdialog:isShown()
         insidehubtext = false
       end
-
       if love.keyboard.isDown("d") then
         rover.x = rover.x + 2
       end
@@ -128,8 +128,6 @@ function love.update(dt)
       if love.keyboard.isDown("w") then
         rover.y = rover.y - 2
       end
-
-
     end
 
     if insideHub == false then
@@ -140,7 +138,8 @@ function love.update(dt)
       camera.y = -400
     end
 
-   if rover.x >= 240 + hub.x and
+    -- going into the hub
+    if rover.x >= 240 + hub.x and
       rover.x <= 240 + 45 + hub.x and
       rover.y >= 110 + hub.y  and
       rover.y <= 110 + 95 + hub.y
@@ -150,56 +149,45 @@ function love.update(dt)
       rover.y = 200
     end
 
-  -- going into the hub
-  if rover.x >= 240 + hub.x and
-    rover.x <= 240 + 45 + hub.x and
-    rover.y >= 110 + hub.y  and
-    rover.y <= 110 + 95 + hub.y
-  then
-    insideHub = true
-    rover.x = -650
-    rover.y = 200
-  end
-
-  -- leaving the hub
-  if insideHub == true then
-    if rover.x >= -800 and
-       rover.x <= -800 + 400 and
-       rover.y >= 236 and
-       rover.y <= 236 + 128
-     then
-       insideHub = false
-       rover.x = hub.x + 400
-       rover.y = hub.y + 200
-     end
-  end
-
-  -- charging on the charge pad, using two different rectangles
-  if insideHub == true then
-    if rover.x + rover.w >= 124 -1000 and
-      rover.x <= 124 + 107 -1000 and
-      rover.y + rover.h >= 431 -300 and
-      rover.y <= 431 + 75 -300
-    then
-      insideCharge1 = true
-    else
-      insideCharge1 = false
+    -- leaving the hub
+    if insideHub == true then
+      if --rover.x >= -800 and
+         --rover.x <= -800 + 400 and
+         rover.y >= 236 and
+         rover.y <= 236 + 128
+      then
+         insideHub = false
+         rover.x = hub.x + 400
+         rover.y = hub.y + 200
+      end
     end
 
-    if rover.x >= 36 -1000 and
-      rover.x <= 36 + 107 -1000 and
-      rover.y >= 522 -300 and
-      rover.y <= 522 + 75 -300
-    then
-      insideCharge2 = true
-    else
-      insideCharge2 = false
+    -- charging on the charge pad, using two different rectangles
+    if insideHub == true then
+      if rover.x + rover.w >= 124 -1000 and
+        rover.x <= 124 + 107 -1000 and
+        rover.y + rover.h >= 431 -300 and
+        rover.y <= 431 + 75 -300
+      then
+        insideCharge1 = true
+      else
+        insideCharge1 = false
+      end
+
+      if rover.x >= 36 -1000 and
+        rover.x <= 36 + 107 -1000 and
+        rover.y >= 522 -300 and
+        rover.y <= 522 + 75 -300
+      then
+        insideCharge2 = true
+      else
+        insideCharge2 = false
     end
 
     if insideCharge1 == true or insideCharge2 == true then
       battery.x = -1000 + 30
       battery.y = -300 + 30
-      battery:charge(1)
+      battery:charge(2)
       if bmcount > 0 then
         rover.speed = rover.speed + (bmcount/10)
         bmcount = 0
@@ -213,20 +201,18 @@ function love.update(dt)
         rmcount = 0
       end
     end
-  end
 
+    end
 
-
-  if insideHub == false then
-    rover:update(dt,map)
-    camera:checkBorderCollision(map)
-    battery.x = rover.x  - (love.graphics.getWidth()/2) + 30
-    battery.y = rover.y  - (love.graphics.getHeight()/2) + 30
-    battery:update(dt)
-    map.miniX = rover.x  - (love.graphics.getWidth()/2) + love.graphics.getWidth() - 240--175
-    map.miniY = rover.y  - (love.graphics.getHeight()/2) + love.graphics.getHeight() - 240--175
-  end
-
+    if insideHub == false then
+      rover:update(dt,map)
+      camera:checkBorderCollision(map)
+      battery.x = rover.x  - (love.graphics.getWidth()/2) + 30
+      battery.y = rover.y  - (love.graphics.getHeight()/2) + 30
+      battery:update(dt)
+      map.miniX = rover.x  - (love.graphics.getWidth()/2) + love.graphics.getWidth() - 240--175
+      map.miniY = rover.y  - (love.graphics.getHeight()/2) + love.graphics.getHeight() - 240--175
+    end
   else
     gameover = true
     gameoveralpha = gameoveralpha + 1
@@ -274,8 +260,6 @@ function love.draw()
   love.graphics.print("speed:", 1000, 10)
   love.graphics.print(rover.speed, 1120, 10)
 end
-
-
 
 function FindProximity(x,y)
   x0 = (x - rover.x)^2
