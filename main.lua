@@ -1,7 +1,8 @@
 -- 2019 HCPSxJMU Game Jam
 -- Curious Curiosity
--- by Carlo Mehegan, Austin Spitzer, Thomas Shulgan, Stella Alexiou
+-- by Carlo Mehegan, Austin Spitzer, Thomas Shulgan, Stella Alexiou (CATS)
 -- October 11, 2019
+-- https://github.com/CATS-HCPS-GameJam19/
 
 local Rover = require 'rover'
 local Map = require 'map'
