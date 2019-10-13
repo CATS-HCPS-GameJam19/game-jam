@@ -17,7 +17,7 @@ function love.load()
   Redm = love.graphics.newImage("sprites/red mineral.png")
   Purplem = love.graphics.newImage("sprites/Puprple mineral.png")
   Talkies.font = love.graphics.newFont("nimbusmono-regular.otf", 30)
-  
+
   local firstdialog = Talkies.say("NASA", "Hello, Curiosity! Welcome to Mars! (press the space bar to continue)--The goal of your mission:--collect all the minerals in this sector and take them to the hub to upgrade yourself.")
   local seconddialog = Talkies.say("NASA", "The battery bar you see on the top of your screen shows you how much power you have left until you die.")
   local thirddialog = Talkies.say("NASA", "Also, as you collect minerals, the mineral counter located at the top right of your screen will increase.")
@@ -65,7 +65,7 @@ function love.update(dt)
   if battery.e >0 then
     for i = 1, #blueMineral do
       bm = blueMineral[i]
-      if FindProximity(bm.x+(bm.w/2),bm.y+(bm.h/2)) < 30 and bm.broken == false
+      if FindProximity(bm.x+(bm.w/2),bm.y+(bm.h/2)) < 30+(rover.speed*2) and bm.broken == false
        then
         bmcount = bmcount + 1
         bm.broken = true
@@ -73,7 +73,7 @@ function love.update(dt)
     end
     for i = 1, #purpleMineral do
         pm = purpleMineral[i]
-        if FindProximity(pm.x+(pm.w/2),pm.y+(pm.h/2)) < 30 and pm.broken == false
+        if FindProximity(pm.x+(pm.w/2),pm.y+(pm.h/2)) < 30+(rover.speed*2) and pm.broken == false
          then
           pmcount = pmcount + 1
           pm.broken = true
@@ -81,7 +81,7 @@ function love.update(dt)
       end
       for i = 1, #redMineral do
           rm = redMineral[i]
-          if FindProximity(rm.x+(rm.w/2),rm.y+(rm.h/2)) < 30 and rm.broken == false
+          if FindProximity(rm.x+(rm.w/2),rm.y+(rm.h/2)) < 30+(rover.speed*2) and rm.broken == false
            then
             rmcount = rmcount + 1
             rm.broken = true
@@ -109,13 +109,13 @@ function love.update(dt)
         battery:charge(-0.25)
       end
     elseif insideHub == true then
-      
+
       if insidehubtext == true then
         local hubdialog = Talkies.say("NASA", "Welcome to The Hub! To your left, you will be able to charge your rover. This will also convert your collected minerals to upgrading your speed.")
         hubdialog:isShown()
         insidehubtext = false
       end
-      
+
       if love.keyboard.isDown("d") then
         rover.x = rover.x + 2
       end
