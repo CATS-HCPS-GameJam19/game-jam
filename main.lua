@@ -18,7 +18,7 @@ function love.load()
   love.window.setTitle("Curious Curiosity") -- window title
   Bluem = love.graphics.newImage("sprites/Blue mineral.png")
   Redm = love.graphics.newImage("sprites/red mineral.png")
-  Purplem = love.graphics.newImage("sprites/Puprple mineral.png")
+  Purplem = love.graphics.newImage("sprites/puprple mineral.png")
   Talkies.font = love.graphics.newFont("nimbusmono-regular.otf", 30)
 
   local firstdialog = Talkies.say("NASA", "Hello, Curiosity! Welcome to Mars! (press the space bar to continue)--The goal of your mission:--collect all the minerals in this sector and take them to the hub to upgrade yourself.")
@@ -48,7 +48,6 @@ function love.load()
     redMineral[i] = Mineral:new('sprites/red mineral.png')
   end
 
-  Mars = love.graphics.newImage("Sprites/Mars Background.png")
   rover = Rover:new(7200, 6700)
   map = Map:new(20,20,50)
   gameover = false
@@ -95,18 +94,18 @@ function love.update(dt)
 
     if insideHub == false then
       battery:charge(-0.05)
-      if love.keyboard.isDown("d") then
+      if love.keyboard.isDown("d") or love.keyboard.isDown("right") then
         rover.r = rover.r + .08
       end
-      if love.keyboard.isDown("s") then
+      if love.keyboard.isDown("s") or love.keyboard.isDown("down") then
         rover.y = rover.y - math.sin(rover.r - math.pi/2) * rover.speed
         rover.x = rover.x - math.cos(rover.r - math.pi/2) * rover.speed
         battery:charge(-0.25)
       end
-      if love.keyboard.isDown("a") then
+      if love.keyboard.isDown("a") or love.keyboard.isDown("left") then
         rover.r = rover.r - .08
       end
-      if love.keyboard.isDown("w") then
+      if love.keyboard.isDown("w") or love.keyboard.isDown("up") then
         rover.y = rover.y + math.sin(rover.r - math.pi/2) * rover.speed
         rover.x = rover.x + math.cos(rover.r - math.pi/2) * rover.speed
         battery:charge(-0.25)
@@ -117,16 +116,16 @@ function love.update(dt)
         hubdialog:isShown()
         insidehubtext = false
       end
-      if love.keyboard.isDown("d") then
+      if love.keyboard.isDown("d") or love.keyboard.isDown("right") then
         rover.x = rover.x + 2
       end
-      if love.keyboard.isDown("s") then
+      if love.keyboard.isDown("s") or love.keyboard.isDown("down") then
         rover.y = rover.y + 2
       end
-      if love.keyboard.isDown("a") then
+      if love.keyboard.isDown("a") or love.keyboard.isDown("left") then
         rover.x = rover.x - 2
       end
-      if love.keyboard.isDown("w") then
+      if love.keyboard.isDown("w") or love.keyboard.isDown("up") then
         rover.y = rover.y - 2
       end
     end
