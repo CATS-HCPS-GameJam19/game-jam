@@ -56,6 +56,7 @@ function love.load()
   insidehubtext = true
   insideCharge1 = false
   insideCharge2 = false
+  gearshiftunlock = false
   hub = Hub:new(6700,6700)
   battery = Battery:new()
   bmcount = 0
@@ -98,17 +99,30 @@ function love.update(dt)
         rover.r = rover.r + .08
       end
       if love.keyboard.isDown("s") or love.keyboard.isDown("down") then
-        rover.y = rover.y - math.sin(rover.r - math.pi/2) * rover.speed
-        rover.x = rover.x - math.cos(rover.r - math.pi/2) * rover.speed
-        battery:charge(-0.25)
+        if love.keyboard.isDown("lshift") and gearshiftunlock == true then --slow down when holding shift and speed > 50
+          rover.y = rover.y - math.sin(rover.r - math.pi/2) * 20
+          rover.x = rover.x - math.cos(rover.r - math.pi/2) * 20
+          battery:charge(-0.10)
+        else
+          rover.y = rover.y - math.sin(rover.r - math.pi/2) * rover.speed
+          rover.x = rover.x - math.cos(rover.r - math.pi/2) * rover.speed
+          battery:charge(-0.25)
+        end
       end
       if love.keyboard.isDown("a") or love.keyboard.isDown("left") then
         rover.r = rover.r - .08
       end
       if love.keyboard.isDown("w") or love.keyboard.isDown("up") then
-        rover.y = rover.y + math.sin(rover.r - math.pi/2) * rover.speed
-        rover.x = rover.x + math.cos(rover.r - math.pi/2) * rover.speed
-        battery:charge(-0.25)
+        if love.keyboard.isDown("lshift") and gearshiftunlock == true then --slow down when holding shift and speed > 50
+        rover.y = rover.y + math.sin(rover.r - math.pi/2) * 20
+        rover.x = rover.x + math.cos(rover.r - math.pi/2) * 20
+        battery:charge(-0.10)
+        else
+          rover.y = rover.y + math.sin(rover.r - math.pi/2) * rover.speed
+          rover.x = rover.x + math.cos(rover.r - math.pi/2) * rover.speed
+          battery:charge(-0.25)
+        end
+
       end
     elseif insideHub == true then
       if insidehubtext == true then
@@ -200,6 +214,11 @@ function love.update(dt)
         rover.speed = rover.speed + (rmcount/10)
         rmcount = 0
       end
+      if rover.speed >= 50 and gearshiftunlock == false then
+        local speeddialog = Talkies.say("NASA", "Congratulations! Your speed has hit 50. You're making great progress! Try pressing SHIFT to shift gears and move more precisely.")
+        speeddialog:isShown()
+        gearshiftunlock = true
+      end
     end
 
     end
@@ -209,9 +228,10 @@ function love.update(dt)
       camera:checkBorderCollision(map)
       battery.x = rover.x  - (love.graphics.getWidth()/2) + 30
       battery.y = rover.y  - (love.graphics.getHeight()/2) + 30
-      battery:update(dt)
-      map.miniX = rover.x  - (love.graphics.getWidth()/2) + love.graphics.getWidth() - 240--175
-      map.miniY = rover.y  - (love.graphics.getHeight()/2) + love.graphics.getHeight() - 240--175
+      battery:update(map.w * map.imgw, map.h * map.imgh)
+      map.miniX = rover.x  - (love.graphics.getWidth()/2) + love.graphics.getWidth() - 240
+      map.miniY = rover.y  - (love.graphics.getHeight()/2) + love.graphics.getHeight() - 240
+      map:updateMini(map.w * map.imgw, map.h * map.imgh)
     end
   else
     gameover = true
@@ -251,14 +271,16 @@ function love.draw()
 
   camera:unset()
   Talkies.draw()
-  love.graphics.draw(Bluem, 450, 10)
-  love.graphics.draw(Redm, 650, 10)
-  love.graphics.draw(Purplem, 550, 10)
-  love.graphics.print(bmcount, 500, 10)
-  love.graphics.print(pmcount, 600, 10)
-  love.graphics.print(rmcount, 700, 10)
-  love.graphics.print("speed:", 1000, 10)
-  love.graphics.print(rover.speed, 1120, 10)
+
+  local sw = love.graphics.getWidth()
+  love.graphics.draw(Bluem, sw/2 - 150, 20)
+  love.graphics.draw(Redm, sw/2 + 50, 20)
+  love.graphics.draw(Purplem, sw/2 - 50, 20)
+  love.graphics.print(bmcount, sw/2 - 100, 20)
+  love.graphics.print(pmcount, sw/2, 20)
+  love.graphics.print(rmcount, sw/2 + 100, 20)
+  love.graphics.print("speed:", sw - 210, 20)
+  love.graphics.print(rover.speed, sw - 90, 20)
 end
 
 function FindProximity(x,y)

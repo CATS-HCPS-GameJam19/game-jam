@@ -27,9 +27,21 @@ function Map:initialize(w,h,s)
   end
 end
 
-function Map:updateMini(dt)
-
+function Map:updateMini(mapw,maph)
+  if self.miniX < love.graphics.getWidth() - 240 then
+    self.miniX = love.graphics.getWidth() - 240
+  end
+  if self.miniY < love.graphics.getHeight() - 240 then
+    self.miniY = love.graphics.getHeight() - 240
+  end
+  if self.miniX > mapw - 240 then
+    self.miniX = mapw - 240
+  end
+  if self.miniY > maph - 240 then
+    self.miniY = maph - 240
+  end
 end
+
 function Map:drawMini(rover)
   for x = 1,self.w do
     for y = 1,self.h do

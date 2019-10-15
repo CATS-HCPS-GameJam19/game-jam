@@ -18,7 +18,7 @@ end
 function Mineral:draw()
   if self.broken == false then
     love.graphics.setColor(1,1,1)
-    --love.graphics.print(self.x..", "..self.y, self.x, self.y)
+    -- love.graphics.print(self.x..", "..self.y, self.x, self.y)
     love.graphics.draw(self.img, (self.x), (self.y), 0, 2)
   end
 end

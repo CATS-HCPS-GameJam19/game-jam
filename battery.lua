@@ -13,12 +13,18 @@ function Battery:initialize()
   self.maxe = 1000
 end
 
-function Battery:update(num)
+function Battery:update(mapw,maph)
   if self.x < 30 then
     self.x = 30
   end
   if self.y < 30 then
     self.y = 30
+  end
+  if self.x > mapw - love.graphics.getWidth() + 30 then
+    self.x = mapw - love.graphics.getWidth() + 30
+  end
+  if self.y > maph - love.graphics.getHeight() + 30 then
+    self.y = maph - love.graphics.getHeight() + 30
   end
 end
 
