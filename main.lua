@@ -13,7 +13,8 @@ local Hub = require "hub"
 local Talkies = require('talkies')
 
 function love.load()
-  love.window.setMode(1200, 800) --sets size of window
+  -- love.window.setMode(1200, 800) --sets size of window
+  love.window.setFullscreen(true)
   love.graphics.setDefaultFilter('nearest', 'nearest') -- makes images not blurry
   love.window.setTitle("Curious Curiosity") -- window title
   Bluem = love.graphics.newImage("sprites/Blue mineral.png")
@@ -34,17 +35,17 @@ function love.load()
   fifthdialog:isShown()
 
   blueMineral = {}
-  for i = 1, 1500 do
+  for i = 1, 1200 do
     blueMineral[i] = Mineral:new('sprites/Blue mineral.png')
   end
 
   purpleMineral = {}
-  for i = 1, 1300 do
+  for i = 1, 1200 do
     purpleMineral[i] = Mineral:new('sprites/puprple mineral.png')
   end
 
   redMineral = {}
-  for i = 1, 1100 do
+  for i = 1, 1160 do
     redMineral[i] = Mineral:new('sprites/red mineral.png')
   end
 
@@ -144,6 +145,15 @@ function love.update(dt)
       end
     end
 
+    -- hub collision
+    -- if rover.x >= hub.x and
+    --   rover.x <= hub.x + hub.w and
+    --   rover.y >= hub.y and
+    --   rover.y <= hub.y + hub.h
+    -- then
+    --   rover.x = rover.x - (rover.x - hub.x)
+    -- end
+
     if insideHub == false then
       camera.x = rover.x  - (love.graphics.getWidth()/2)
       camera.y = rover.y  - (love.graphics.getHeight()/2)
@@ -152,11 +162,13 @@ function love.update(dt)
       camera.y = -400
     end
 
+
+
     -- going into the hub
-    if rover.x >= 240 + hub.x and
-      rover.x <= 240 + 45 + hub.x and
-      rover.y >= 110 + hub.y  and
-      rover.y <= 110 + 95 + hub.y
+    if rover.x >= hub.enterx and
+      rover.x <= hub.enterx + hub.enterw and
+      rover.y >= hub.entery  and
+      rover.y <= hub.entery + hub.enterh
     then
       insideHub = true
       rover.x = -650
@@ -279,8 +291,9 @@ function love.draw()
   love.graphics.print(bmcount, sw/2 - 100, 20)
   love.graphics.print(pmcount, sw/2, 20)
   love.graphics.print(rmcount, sw/2 + 100, 20)
-  love.graphics.print("speed:", sw - 210, 20)
-  love.graphics.print(rover.speed, sw - 90, 20)
+  love.graphics.setColor(1,1,1)
+  love.graphics.print("speed:", sw - 230, 20)
+  love.graphics.print(rover.speed, sw - 120, 20)
 end
 
 function FindProximity(x,y)

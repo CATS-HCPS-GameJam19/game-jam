@@ -12,7 +12,7 @@ function Rover:initialize(x, y)
   self.img = love.graphics.newImage('sprites/Curiosity Hub.png')
   self.e = 1000
   self.back = love.graphics.newImage("sprites/backside of rover.png")
-  self.speed = 490
+  self.speed = 5
 end
 
 
