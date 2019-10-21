@@ -94,33 +94,35 @@ function love.update(dt)
 
     Talkies.update(dt)
 
+    local dx = 0
+    local dy = 0
     if insideHub == false then
       battery:charge(-0.05)
       if love.keyboard.isDown("d") or love.keyboard.isDown("right") then
         rover.r = rover.r + .08
       end
-      if love.keyboard.isDown("s") or love.keyboard.isDown("down") then
-        if love.keyboard.isDown("lshift") and gearshiftunlock == true then --slow down when holding shift and speed > 50
-          rover.y = rover.y - math.sin(rover.r - math.pi/2) * 20
-          rover.x = rover.x - math.cos(rover.r - math.pi/2) * 20
-          battery:charge(-0.10)
-        else
-          rover.y = rover.y - math.sin(rover.r - math.pi/2) * rover.speed
-          rover.x = rover.x - math.cos(rover.r - math.pi/2) * rover.speed
-          battery:charge(-0.25)
-        end
-      end
       if love.keyboard.isDown("a") or love.keyboard.isDown("left") then
         rover.r = rover.r - .08
       end
+      if love.keyboard.isDown("s") or love.keyboard.isDown("down") then
+        if love.keyboard.isDown("lshift") and gearshiftunlock == true then --slow down when holding shift and speed > 50
+          dy = dy - math.sin(rover.r - math.pi/2) * 20
+          dx = dx - math.cos(rover.r - math.pi/2) * 20
+          battery:charge(-0.10)
+        else
+          dy = dy - math.sin(rover.r - math.pi/2) * rover.speed
+          dx = dx - math.cos(rover.r - math.pi/2) * rover.speed
+          battery:charge(-0.25)
+        end
+      end
       if love.keyboard.isDown("w") or love.keyboard.isDown("up") then
         if love.keyboard.isDown("lshift") and gearshiftunlock == true then --slow down when holding shift and speed > 50
-        rover.y = rover.y + math.sin(rover.r - math.pi/2) * 20
-        rover.x = rover.x + math.cos(rover.r - math.pi/2) * 20
-        battery:charge(-0.10)
+          dy = dy + math.sin(rover.r - math.pi/2) * 20
+          dx = dx + math.cos(rover.r - math.pi/2) * 20
+          battery:charge(-0.10)
         else
-          rover.y = rover.y + math.sin(rover.r - math.pi/2) * rover.speed
-          rover.x = rover.x + math.cos(rover.r - math.pi/2) * rover.speed
+          dy = dy + math.sin(rover.r - math.pi/2) * rover.speed
+          dx = dx + math.cos(rover.r - math.pi/2) * rover.speed
           battery:charge(-0.25)
         end
 
@@ -132,27 +134,66 @@ function love.update(dt)
         insidehubtext = false
       end
       if love.keyboard.isDown("d") or love.keyboard.isDown("right") then
-        rover.x = rover.x + 2
+        dx = dx + 2
       end
       if love.keyboard.isDown("s") or love.keyboard.isDown("down") then
-        rover.y = rover.y + 2
+        dy = dy + 2
       end
       if love.keyboard.isDown("a") or love.keyboard.isDown("left") then
-        rover.x = rover.x - 2
+        dx = dx - 2
       end
       if love.keyboard.isDown("w") or love.keyboard.isDown("up") then
-        rover.y = rover.y - 2
+        dy = dy - 2
       end
     end
 
-    -- hub collision
-    -- if rover.x >= hub.x and
-    --   rover.x <= hub.x + hub.w and
-    --   rover.y >= hub.y and
-    --   rover.y <= hub.y + hub.h
+    local newx = rover.x + dx
+    local newy = rover.y + dy
+
+    -- -- hub collision
+    -- if newx >= hub.x and
+    --   newx <= hub.x + hub.buildingw and
+    --   newy >= hub.y and
+    --   newy <= hub.y + hub.buildingh
     -- then
-    --   rover.x = rover.x - (rover.x - hub.x)
+    --   if dx > 0 then --moving east
+    --     dx = dx - (rover.x - hub.x)
+    --   elseif dx < 0 then --moving west
+    --     dx = dx + (hub.x + hub.buildingw - rover.x)
+    --   end
+    --   if dy > 0 then --moving south
+    --     dy = dy - (rover.y - hub.y)
+    --   elseif dy < 0 then --moving north
+    --     dy = dy + (hub.y + hub.buildingh - rover.y)
+    --   end
     -- end
+
+    -- hub collision
+    while newx >= hub.x and
+      newx <= hub.x + hub.buildingw and
+      newy >= hub.y and
+      newy <= hub.y + hub.buildingh
+    do
+      newx = newx - (dx/5)
+      newy = newy - (dy/5)
+    end
+
+    -- while
+    --   newx >= hub.x and
+    --   newx <= hub.x + hub.buildingw
+    -- do
+    --   newx = newx - (dx/5)
+    -- end
+    --
+    -- while
+    --   newy >= hub.y and
+    --   newy <= hub.y + hub.buildingh
+    -- do
+    --   newy = newy - (dy/5)
+    -- end
+
+    rover.x = newx
+    rover.y = newy
 
     if insideHub == false then
       camera.x = rover.x  - (love.graphics.getWidth()/2)
@@ -161,8 +202,6 @@ function love.update(dt)
       camera.x = -1200
       camera.y = -400
     end
-
-
 
     -- going into the hub
     if rover.x >= hub.enterx and

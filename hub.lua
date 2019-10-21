@@ -11,8 +11,11 @@ function Hub:initialize(x,y)
   self.r = 0
   self.img = love.graphics.newImage('sprites/outside_of_hub.png')
   self.insideimg = love.graphics.newImage("sprites/Hub.png")
+
+  self.buildingw = 24 * self.s
+  self.buildingh = 29 * self.s
   --stuff for entrance hitbox
-  self.enterx = self.x + (24 * self.s)
+  self.enterx = self.x + (23 * self.s)
   self.entery = self.y + (8 * self.s)
   self.enterw = 8 * self.s
   self.enterh = 13 * self.s

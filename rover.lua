@@ -12,23 +12,23 @@ function Rover:initialize(x, y)
   self.img = love.graphics.newImage('sprites/Curiosity Hub.png')
   self.e = 1000
   self.back = love.graphics.newImage("sprites/backside of rover.png")
-  self.speed = 5
+  self.speed = 4
 end
 
 
 
 function Rover:update(dt,map)
-    if self.x < 0 then
-      self.x = 0
-    end
-    if self.y < 0 then
-      self.y = 0
-    end
-    if self.x > map.w*map.imgw - self.w then
-      self.x = map.w*map.imgw- self.w
-    end
-    if self.y > map.h*map.imgh - self.h then
-      self.y = map.h*map.imgh- self.h
+  if self.x < 0 then
+    self.x = 0
+  end
+  if self.y < 0 then
+    self.y = 0
+  end
+  if self.x > map.w*map.imgw - self.w then
+    self.x = map.w*map.imgw- self.w
+  end
+  if self.y > map.h*map.imgh - self.h then
+    self.y = map.h*map.imgh- self.h
   end
 end
 
