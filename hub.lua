@@ -19,6 +19,13 @@ function Hub:initialize(x,y)
   self.entery = self.y + (8 * self.s)
   self.enterw = 8 * self.s
   self.enterh = 13 * self.s
+
+--for inside hub screen
+  self.ins = 1
+  self.inx = -1000
+  self.iny = -1000
+  self.inw = 45*17.77*self.ins
+  self.inh = 32*18.75*self.ins
 end
 
 -- rover.x >= 240      + hub.x
@@ -32,7 +39,7 @@ function Hub:update(dt)
 end
 
 function Hub:draw()
-  love.graphics.draw(self.insideimg, -1000, -300, 0, 17.77, 18.75) --inside of the hub
+  love.graphics.draw(self.insideimg, self.inx, self.iny, 0, 17.77*self.ins, 18.75*self.ins) --inside of the hub
   love.graphics.setColor(1,1,1)
   love.graphics.draw(self.img, self.x, self.y, self.r, self.s) --the outside of the hub
 end

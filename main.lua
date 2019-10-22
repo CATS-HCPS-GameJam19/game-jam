@@ -13,8 +13,8 @@ local Hub = require "hub"
 local Talkies = require('talkies')
 
 function love.load()
-  -- love.window.setMode(1200, 800) --sets size of window
-  love.window.setFullscreen(true)
+  love.window.setMode(1200, 800, {resizable = true, minwidth=800, minheight=600}) --sets size of window
+  -- love.window.setFullscreen(true)
   love.graphics.setDefaultFilter('nearest', 'nearest') -- makes images not blurry
   love.window.setTitle("Curious Curiosity") -- window title
   Bluem = love.graphics.newImage("sprites/Blue mineral.png")
@@ -53,6 +53,7 @@ function love.load()
   map = Map:new(20,20,50)
   gameover = false
   gameoveralpha = 0
+  showminimap = true
   insideHub = false
   insidehubtext = true
   insideCharge1 = false
@@ -150,24 +151,6 @@ function love.update(dt)
     local newx = rover.x + dx
     local newy = rover.y + dy
 
-    -- -- hub collision
-    -- if newx >= hub.x and
-    --   newx <= hub.x + hub.buildingw and
-    --   newy >= hub.y and
-    --   newy <= hub.y + hub.buildingh
-    -- then
-    --   if dx > 0 then --moving east
-    --     dx = dx - (rover.x - hub.x)
-    --   elseif dx < 0 then --moving west
-    --     dx = dx + (hub.x + hub.buildingw - rover.x)
-    --   end
-    --   if dy > 0 then --moving south
-    --     dy = dy - (rover.y - hub.y)
-    --   elseif dy < 0 then --moving north
-    --     dy = dy + (hub.y + hub.buildingh - rover.y)
-    --   end
-    -- end
-
     -- hub collision
     while newx >= hub.x and
       newx <= hub.x + hub.buildingw and
@@ -178,20 +161,6 @@ function love.update(dt)
       newy = newy - (dy/5)
     end
 
-    -- while
-    --   newx >= hub.x and
-    --   newx <= hub.x + hub.buildingw
-    -- do
-    --   newx = newx - (dx/5)
-    -- end
-    --
-    -- while
-    --   newy >= hub.y and
-    --   newy <= hub.y + hub.buildingh
-    -- do
-    --   newy = newy - (dy/5)
-    -- end
-
     rover.x = newx
     rover.y = newy
 
@@ -199,8 +168,8 @@ function love.update(dt)
       camera.x = rover.x  - (love.graphics.getWidth()/2)
       camera.y = rover.y  - (love.graphics.getHeight()/2)
     else
-      camera.x = -1200
-      camera.y = -400
+      camera.x = hub.inx - ((love.graphics.getWidth() - hub.inw)/2)  --adjusts the camera so that
+      camera.y = hub.iny - ((love.graphics.getHeight() - hub.inh)/2) --hub is centered on the screen
     end
 
     -- going into the hub
@@ -210,39 +179,40 @@ function love.update(dt)
       rover.y <= hub.entery + hub.enterh
     then
       insideHub = true
-      rover.x = -650
-      rover.y = 200
+      rover.x = hub.inx + (hub.inw/2) - 80
+      rover.y = hub.iny + (hub.inh*0.8)
     end
 
     -- leaving the hub
     if insideHub == true then
       if --rover.x >= -800 and
          --rover.x <= -800 + 400 and
-         rover.y >= 236 and
-         rover.y <= 236 + 128
+         rover.y >= hub.iny + (hub.inh*0.9) and
+         rover.y <= hub.iny + (hub.inh*1.2)
       then
          insideHub = false
          rover.x = hub.x + 400
-         rover.y = hub.y + 200
+         rover.y = hub.y + 100
       end
     end
 
     -- charging on the charge pad, using two different rectangles
+    -- these numbers are kooky and not very big brain but they work
     if insideHub == true then
-      if rover.x + rover.w >= 124 -1000 and
-        rover.x <= 124 + 107 -1000 and
-        rover.y + rover.h >= 431 -300 and
-        rover.y <= 431 + 75 -300
+      if rover.x + rover.w >= 124 + hub.inx and
+        rover.x <= 124 + 107 + hub.inx and
+        rover.y + rover.h >= 431 + hub.iny and
+        rover.y <= 431 + 75 + hub.iny
       then
         insideCharge1 = true
       else
         insideCharge1 = false
       end
 
-      if rover.x >= 36 -1000 and
-        rover.x <= 36 + 107 -1000 and
-        rover.y >= 522 -300 and
-        rover.y <= 522 + 75 -300
+      if rover.x >= 36 + hub.inx and
+        rover.x <= 36 + 107 + hub.inx and
+        rover.y >= 522 + hub.iny and
+        rover.y <= 522 + 75 + hub.iny
       then
         insideCharge2 = true
       else
@@ -250,8 +220,8 @@ function love.update(dt)
     end
 
     if insideCharge1 == true or insideCharge2 == true then
-      battery.x = -1000 + 30
-      battery.y = -300 + 30
+      battery.x = camera.x + 30
+      battery.y = camera.y + 30
       battery:charge(2)
       if bmcount > 0 then
         rover.speed = rover.speed + (bmcount/10)
@@ -293,7 +263,11 @@ end
 
 function love.draw()
   camera:set()
-  map:draw()
+
+  if insideHub == false then
+    map:draw()
+  end
+
   for i = 1, #blueMineral do
     if FindProximity(blueMineral[i].x,blueMineral[i].y) < 1000 then
       blueMineral[i]:draw()
@@ -313,12 +287,16 @@ function love.draw()
   hub:draw()
   rover:draw()
   battery:draw()
-  map:drawMini(rover)
+  if showminimap then
+    map:drawMini(rover)
+  end
 
   if gameover == true then
     love.graphics.setColor(0, 0, 0, gameoveralpha/100)
     love.graphics.rectangle("fill", camera.x, camera.y, love.graphics.getWidth(), love.graphics.getHeight())
   end
+
+  -- love.graphics.rectangle("line", rover.x, rover.y, rover.w, rover.h) --debug rover hitbox
 
   camera:unset()
   Talkies.draw()
@@ -351,5 +329,12 @@ function love.keypressed(key, scancode, isrepeat)
   if key == "space" then Talkies.onAction()
   elseif key == "up" then Talkies.prevOption()
   elseif key == "down" then Talkies.nextOption()
+  end
+  if key == "m" then
+    if showminimap == false then
+      showminimap = true
+    elseif showminimap == true then
+      showminimap = false
+    end
   end
 end
