@@ -24,9 +24,9 @@ function love.load()
 
   local firstdialog = Talkies.say("NASA", "Hello, Curiosity! Welcome to Mars! (press the space bar to continue)--The goal of your mission:--collect all the minerals in this sector and take them to the hub to upgrade yourself.")
   local seconddialog = Talkies.say("NASA", "The battery bar you see on the top of your screen shows you how much power you have left until you die.")
-  local thirddialog = Talkies.say("NASA", "Also, as you collect minerals, the mineral counter located at the top right of your screen will increase.")
-  local fourthdialog = Talkies.say("NASA", "To charge your battery, view the map, and store your minerals, enter The Hub located to the bottom left of your current position. Minerals are automatically spent to speed you up")
-  local fifthdialog = Talkies.say("NASA", "Move using the w, a, s, and d keys.")
+  local thirddialog = Talkies.say("NASA", "As you collect minerals, the mineral counter at the top of your screen will increase.")
+  local fourthdialog = Talkies.say("NASA", "To charge your battery and store your minerals, enter The Hub located to your left.--Minerals are automatically spent to speed you up.")
+  local fifthdialog = Talkies.say("NASA", "Move using the w, a, s, and d keys.--Press m to bring up your minimap.")
 
   firstdialog:isShown()
   seconddialog:isShown()
@@ -34,7 +34,7 @@ function love.load()
   fourthdialog:isShown()
   fifthdialog:isShown()
 
-  blueMineral = {}
+  blueMineral = {} -- top speed = 3604
   for i = 1, 1200 do
     blueMineral[i] = Mineral:new('sprites/Blue mineral.png')
   end
@@ -45,11 +45,10 @@ function love.load()
   end
 
   redMineral = {}
-  for i = 1, 1160 do
+  for i = 1, 1200 do
     redMineral[i] = Mineral:new('sprites/red mineral.png')
   end
 
-  rover = Rover:new(7200, 6700)
   map = Map:new(20,20,50)
   gameover = false
   gameoveralpha = 0
@@ -59,7 +58,8 @@ function love.load()
   insideCharge1 = false
   insideCharge2 = false
   gearshiftunlock = false
-  hub = Hub:new(6700,6700)
+  hub = Hub:new(love.math.random(2400,31000),love.math.random(2400,31000))
+  rover = Rover:new(hub.x + hub.w + 100, hub.y + (hub.h/3))
   battery = Battery:new()
   bmcount = 0
   pmcount = 0
@@ -288,7 +288,7 @@ function love.draw()
   rover:draw()
   battery:draw()
   if showminimap then
-    map:drawMini(rover)
+    map:drawMini(rover,hub)
   end
 
   if gameover == true then
