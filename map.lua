@@ -51,7 +51,7 @@ function Map:drawMini(rover,hub)
     end
   end
   -- love.graphics.setColor(0,0,0)
-  love.graphics.draw(hub.img, (hub.x/self.imgw)*self.miniW + self.miniX, (hub.y/self.imgh)*self.miniH + self.miniY, 0, self.miniS, self.miniS)
+  love.graphics.draw(hub.img, (hub.x/self.imgw)*self.miniW + self.miniX, (hub.y/self.imgh)*self.miniH + self.miniY, 0, self.miniS, self.miniS, (hub.imgw*self.miniS)/2, (hub.imgh*self.miniS)/2)
   -- love.graphics.rectangle("fill", (hub.x/self.imgw)*self.miniW + self.miniX, (hub.y/self.imgh)*self.miniH + self.miniY, 32*self.miniS, 32*self.miniS)
   -- love.graphics.draw(self.img,(math.floor(rover.x/self.imgw)*self.miniW) + self.miniX, (math.floor(rover.y/self.imgh)*self.miniH) + self.miniY, 0, self.miniS)
   love.graphics.setColor(1,1,1)
