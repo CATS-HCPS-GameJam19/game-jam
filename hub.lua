@@ -26,8 +26,8 @@ function Hub:initialize(x,y)
   self.ins = 1
   self.inx = -1000
   self.iny = -1000
-  self.inw = 45*17.77*self.ins
-  self.inh = 32*18.75*self.ins
+  self.inw = 45*17.77*self.ins --should be 45*17.77*self.ins
+  self.inh = 32*18.75*self.ins --should be 32*18.75*self.ins
 end
 
 function Hub:update(dt)

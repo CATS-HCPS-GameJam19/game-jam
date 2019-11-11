@@ -203,7 +203,7 @@ function Talkies.isOpen()
   return Talkies.dialogs:peek() ~= nil
 end
 
-function Talkies.draw()
+function Talkies.draw(minishown,insidehub)
   local currentDialog = Talkies.dialogs:peek()
   if currentDialog == nil then return end
 
@@ -223,7 +223,15 @@ function Talkies.draw()
   local windowWidth, windowHeight = love.graphics.getDimensions()
 
   -- message box
-  local boxW = windowWidth-(2*currentDialog.padding)
+  local boxW = windowWidth-(2*currentDialog.padding) - 250
+  if minishown then
+    boxW = windowWidth-(2*currentDialog.padding) - 250
+  else
+    boxW = windowWidth-(2*currentDialog.padding)
+  end
+  if insidehub then
+    boxW = windowWidth-(2*currentDialog.padding)
+  end
   local boxH = (windowHeight/3)-(2*currentDialog.padding)
   local boxX = currentDialog.padding
   local boxY = windowHeight-(boxH+currentDialog.padding)
@@ -240,7 +248,7 @@ function Talkies.draw()
   local titleBoxH = currentDialog.fontHeight+currentDialog.padding
   local titleBoxY = boxY-titleBoxH-(currentDialog.padding/2)
   local titleX, titleY = boxX + currentDialog.padding, titleBoxY + 2
-  local textX, textY = imgX + imgW + currentDialog.padding, boxY + 1
+  local textX, textY = imgX + imgW + currentDialog.padding, boxY + 10 -- +10 added to align text better
 
   love.graphics.setFont(currentDialog.font)
 
@@ -248,8 +256,7 @@ function Talkies.draw()
   love.graphics.setColor(currentDialog.backgroundColor)
   love.graphics.rectangle("fill", boxX, titleBoxY, titleBoxW, titleBoxH)
   love.graphics.setColor(currentDialog.titleColor)
-  love.graphics.print(currentDialog.title, titleX, titleY)
-
+  love.graphics.print(currentDialog.title, titleX, titleY+4)--+4 added to center the "NASA"
   -- Main message box
   love.graphics.setColor(currentDialog.backgroundColor)
   love.graphics.rectangle("fill", boxX, boxY, boxW, boxH)
@@ -263,8 +270,8 @@ function Talkies.draw()
   end
 
   -- Message text
-  love.graphics.setColor(currentDialog.messageColor)
-  love.graphics.printf(currentMessage.visible, textX, textY, boxW - imgW - (4 * currentDialog.padding))
+  love.graphics.setColor(currentDialog.messageColor) --below, 1.5 scale and /1.5 added to make font bigger
+  love.graphics.printf(currentMessage.visible, textX, textY, (boxW - imgW - (4 * currentDialog.padding))/1.5,"left", 0, 1.5)
 
   -- Message options (when shown)
   if currentDialog:showOptions() and currentMessage.complete then

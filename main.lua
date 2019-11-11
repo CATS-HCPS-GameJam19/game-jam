@@ -11,6 +11,7 @@ local Mineral = require 'mineral'
 local Battery = require 'battery'
 local Hub = require "hub"
 local Talkies = require('talkies')
+local Menu = require "menu"
 
 function love.load()
   love.window.setMode(1200, 800, {resizable = true, minwidth=800, minheight=600}) --sets size of window
@@ -20,8 +21,12 @@ function love.load()
   Bluem = love.graphics.newImage("sprites/Blue mineral.png")
   Redm = love.graphics.newImage("sprites/red mineral.png")
   Purplem = love.graphics.newImage("sprites/puprple mineral.png")
-  Talkies.font = love.graphics.newFont("nimbusmono-regular.otf", 30)
-
+  menufont = love.graphics.newImageFont("imagefont.png",
+    " abcdefghijklmnopqrstuvwxyz" ..
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZ0" ..
+    "123456789.,!?-+/():;%&`'*#=[]\"")
+  -- Talkies.font = love.graphics.newFont("nimbusmono-regular.otf", 30)
+  Talkies.font = menufont
   local firstdialog = Talkies.say("NASA", "Hello, Curiosity! Welcome to Mars! (press the space bar to continue)--The goal of your mission:--collect all the minerals in this sector and take them to the hub to upgrade yourself.")
   local seconddialog = Talkies.say("NASA", "The battery bar you see on the top of your screen shows you how much power you have left until you die.")
   local thirddialog = Talkies.say("NASA", "As you collect minerals, the mineral counter at the top of your screen will increase.")
@@ -50,9 +55,13 @@ function love.load()
   end
 
   map = Map:new(20,20,50)
+  menu = Menu:new()
+  onPad1 = false
+  onPad2 = false
+  onPad = false
   gameover = false
   gameoveralpha = 0
-  showminimap = true
+  showminimap = false
   insideHub = false
   insidehubtext = true
   insideCharge1 = false
@@ -64,6 +73,7 @@ function love.load()
   bmcount = 0
   pmcount = 0
   rmcount = 0
+  score = 100000000000000000000
 end
 
 function love.update(dt)
@@ -94,6 +104,7 @@ function love.update(dt)
     end
 
     Talkies.update(dt)
+    -- menu:update(score)
 
     local dx = 0
     local dy = 0
@@ -198,25 +209,28 @@ function love.update(dt)
 
     -- charging on the charge pad, using two different rectangles
     -- these numbers are kooky and not very big brain but they work
+    -- as long as the inside hub is drawn at the proper scale
+    -- the
     if insideHub == true then
-      if rover.x + rover.w >= 124 + hub.inx and
-        rover.x <= 124 + 107 + hub.inx and
-        rover.y + rover.h >= 431 + hub.iny and
-        rover.y <= 431 + 75 + hub.iny
+      if rover.x + rover.w*1.5 >= 124 + hub.inx and
+        rover.x + rover.w/2 <= 124 + 107 + hub.inx and
+        rover.y + rover.h*1.5 >= 431 + hub.iny and
+        rover.y + rover.h/2 <= 431 + 75 + hub.iny
       then
         insideCharge1 = true
       else
         insideCharge1 = false
       end
 
-      if rover.x >= 36 + hub.inx and
-        rover.x <= 36 + 107 + hub.inx and
-        rover.y >= 522 + hub.iny and
-        rover.y <= 522 + 75 + hub.iny
+      if rover.x + rover.w*1.5 >= 36 + hub.inx and
+        rover.x + rover.w/2 <= 36 + 107 + hub.inx and
+        rover.y + rover.h*1.5 >= 522 + hub.iny and
+        rover.y + rover.h/2 <= 522 + 75 + hub.iny
       then
         insideCharge2 = true
       else
         insideCharge2 = false
+      end
     end
 
     if insideCharge1 == true or insideCharge2 == true then
@@ -242,6 +256,31 @@ function love.update(dt)
       end
     end
 
+    --collision boxes for the right pad that brings up the upgrade screen.
+    --same as the charge pad but mirrored
+    if rover.x + rover.w*1.5 >= hub.inx + hub.inw - 124 - 107 and
+      rover.x + rover.w/2 <= hub.inx + hub.inw - 124 and
+      rover.y + rover.h*1.5 >= 431 + hub.iny and
+      rover.y + rover.h/2 <= 431 + 75 + hub.iny
+    then
+      onPad1 = true
+    else
+      onPad1 = false
+    end
+    if rover.x + rover.w*1.5 >= hub.inx + hub.inw - 36 - 107 and
+      rover.x + rover.w/2 <= hub.inx + hub.inw - 36 and
+      rover.y + rover.h*1.5 >= 522 + hub.iny and
+      rover.y + rover.h/2 <= 522 + 75 + hub.iny
+    then
+      onPad2 = true
+    else
+      onPad2 = false
+    end
+
+    if onPad1 or onPad2 then
+      onPad = true
+    else
+      onPad = false
     end
 
     if insideHub == false then
@@ -296,21 +335,34 @@ function love.draw()
     love.graphics.rectangle("fill", camera.x, camera.y, love.graphics.getWidth(), love.graphics.getHeight())
   end
 
-  -- love.graphics.rectangle("line", rover.x, rover.y, rover.w, rover.h) --debug rover hitbox
+  love.graphics.rectangle("line", rover.x+rover.w/2, rover.y+rover.h/2, rover.w, rover.h) --debug rover hitbox
+  love.graphics.setColor(1,0,0,1)
+  love.graphics.rectangle("line", hub.inx + hub.inw - 36 - 107, hub.iny + 522, 107, 75)
+  love.graphics.rectangle("line", hub.inx + hub.inw - 124 - 107, hub.iny + 431, 107, 75)
+  love.graphics.rectangle("line", hub.inx + 124, hub.iny + 431, 107, 75)
+  love.graphics.rectangle("line", hub.inx + 36, hub.iny + 522, 107, 75)
+  love.graphics.setColor(1,1,1)
 
   camera:unset()
-  Talkies.draw()
-
+  if onPad then
+    menu:draw()
+  end
+  Talkies.draw(showminimap,insideHub)
+  love.graphics.setFont(menufont)
   local sw = love.graphics.getWidth()
   love.graphics.draw(Bluem, sw/2 - 150, 20)
   love.graphics.draw(Redm, sw/2 + 50, 20)
   love.graphics.draw(Purplem, sw/2 - 50, 20)
-  love.graphics.print(bmcount, sw/2 - 100, 20)
-  love.graphics.print(pmcount, sw/2, 20)
-  love.graphics.print(rmcount, sw/2 + 100, 20)
+  love.graphics.print(bmcount, sw/2 - 110, 20, 0, 1.5)
+  love.graphics.print(pmcount, sw/2 - 10, 20, 0, 1.5)
+  love.graphics.print(rmcount, sw/2 + 90, 20, 0, 1.5)
   love.graphics.setColor(1,1,1)
-  love.graphics.print("speed:", sw - 230, 20)
-  love.graphics.print(rover.speed, sw - 120, 20)
+  love.graphics.print("speed:", sw - 230, 20, 0, 1.5)
+  love.graphics.print(rover.speed, sw - 120, 20, 0, 1.5)
+
+  love.graphics.setColor(1,0,0,1)
+  love.graphics.rectangle("line", hub.inx + hub.inw - 36 - 107, hub.iny + 522, 107, 75)
+  love.graphics.setColor(1,1,1)
 end
 
 function FindProximity(x,y)
