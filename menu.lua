@@ -3,32 +3,35 @@ local class = require 'middleclass'
 Menu = class('Menu')
 
 function Menu:initialize()
-  self.x = 75
-  self.y = 50
-  self.w = love.graphics.getWidth() - 150
-  self.h = love.graphics.getHeight() - 150
+  -- if love.graphics.getWidth() <
+  self.x = love.graphics.getWidth()*0.1
+  self.w = love.graphics.getWidth()*0.8
+  self.y = love.graphics.getHeight()*0.1
+  self.h = love.graphics.getHeight()*0.8
+  self.mouseIsDown = false
 
   self.texts = {
     "Speed",
     "Jumps",
     "Damage",
     "Luck",
-    "",
+    "Test",
     "Cannon 1",
     "Cannon 2",
     "Cannon 3",
     "Cannon 4",
-    "",
+    "Test",
     "Cannon 1",
     "Cannon 2",
     "Cannon 3",
     "Cannon 4",
-    "",
+    "Test",
     "Cannon 1",
     "Cannon 2",
     "Cannon 3",
     "Cannon 4",
-    ""
+    "Test",
+    "Test"
   }
   self.prices = {
     50,
@@ -50,10 +53,11 @@ function Menu:initialize()
     200,
     200,
     200,
-    10000
+    10000,
+    1000
   }
-  self.buttons = {}
-  self.Button = Button()
+  self.buttons = {} -- the table of buttons
+  self.Button = Button() -- the class constructor
   local i = 0
   for gy=0,3 do
     for gx=0,4 do
@@ -77,22 +81,22 @@ function drawCrosshair()
   love.graphics.line(mx + 10, my, mx + 5, my)
 end
 
-function isClicked(btn)
-  if mouseIsDown == false then
+function Menu:isClicked(btn)
+  if self.mouseIsDown == false then
     if love.mouse.getX() >= btn.x and
        love.mouse.getX() <= btn.x + btn.w and
        love.mouse.getY() >= btn.y and
        love.mouse.getY() <= btn.y + btn.h and
        love.mouse.isDown(1)
     then--draw pressed button if cursor is over button
-      mouseIsDown = true
+      self.mouseIsDown = true
       return true
     else
       return false
     end
-  elseif mouseIsDown == true then
+  elseif self.mouseIsDown == true then
     if love.mouse.isDown(1) ~= true then
-      mouseIsDown = false
+      self.mouseIsDown = false
     end
     return false
   end
@@ -124,6 +128,7 @@ function Button() -- the class for buttons, objects made and stored in a table i
     love.graphics.rectangle("fill", self.x, self.y, self.w, self.h)
     love.graphics.printf(self.text, self.x + 10, self.y + 10, self.w - 15, "left")
     love.graphics.print(self.price, self.x + 10, self.y + 40)
+    love.graphics.setColor(1,1,1)
   end
   return Button
 end
@@ -132,50 +137,53 @@ end
 
 
 function Menu:update(score)
-  if love.keyboard.isDown("lshift") then
-    -- SPEED UPGRADING
-    if isClicked(self.buttons[1]) then
-      if self.buttons[1].level <= 9 then
-        if self.buttons[1].price < score then
-          score = score - self.buttons[1].price
-          self.buttons[1].level = self.buttons[1].level + 1
-          self.buttons[1].text = "Speed " .. self.buttons[1].level
-          self.buttons[1].price = math.floor(self.buttons[1].price * 1.8)
-          -- player.speed = player.speed + 25
-        end
-        if self.buttons[1].level == 10 then
-          self.buttons[1].price = ""
-          self.buttons[1].isMaxed = true
-        end
+  self.x = love.graphics.getWidth()*0.1
+  self.w = love.graphics.getWidth()*0.8
+  self.y = love.graphics.getHeight()*0.1
+  self.h = love.graphics.getHeight()*0.8
+  -- SPEED UPGRADING
+  if self:isClicked(self.buttons[1]) then
+    if self.buttons[1].level <= 9 then
+      if self.buttons[1].price < score then
+        score = score - self.buttons[1].price
+        self.buttons[1].level = self.buttons[1].level + 1
+        self.buttons[1].text = "Speed " .. self.buttons[1].level
+        self.buttons[1].price = math.floor(self.buttons[1].price * 1.8)
+        -- player.speed = player.speed + 25
+      end
+      if self.buttons[1].level == 10 then
+        self.buttons[1].price = ""
+        self.buttons[1].isMaxed = true
       end
     end
-    --DAMAGE UPGRADING
-    if isClicked(self.buttons[3]) then
-      if self.buttons[3].level <= 9 then
-        if self.buttons[3].price < score then
-          score = score - self.buttons[3].price
-          self.buttons[3].level = self.buttons[3].level + 1
-          self.buttons[3].text = "Damage " .. self.buttons[3].level
-          self.buttons[3].price = math.floor(self.buttons[3].price * 8)
-          -- player.dmg = player.dmg + 1
-        end
-        if self.buttons[3].level == 10 then
-          self.buttons[3].price = ""
-          self.buttons[3].isMaxed = true
-        end
+  end
+  --DAMAGE UPGRADING
+  if self:isClicked(self.buttons[3]) then
+    if self.buttons[3].level <= 9 then
+      if self.buttons[3].price < score then
+        score = score - self.buttons[3].price
+        self.buttons[3].level = self.buttons[3].level + 1
+        self.buttons[3].text = "Damage " .. self.buttons[3].level
+        self.buttons[3].price = math.floor(self.buttons[3].price * 8)
+        -- player.dmg = player.dmg + 1
+      end
+      if self.buttons[3].level == 10 then
+        self.buttons[3].price = ""
+        self.buttons[3].isMaxed = true
       end
     end
   end
 end
 
 function Menu:draw()
-  -- if love.keyboard.isDown("lshift") and onPad then
-    love.graphics.setColor(1, 1, 1, 0.75)
-    love.graphics.rectangle("fill", self.x, self.y, self.w, self.h)
-    for k,v in pairs(self.buttons) do
-      v:draw()
-    end
-  -- end
+  local sw = love.graphics.getWidth()
+  local sh = love.graphics.getHeight()
+  love.graphics.setColor(1, 1, 1, 0.75)
+  love.graphics.rectangle("fill", self.x, self.y, self.w, self.h)
+  -- love.graphics.rectangle("fill", sw*0.1, sh*0.1, sw*0.8, sh*0.8)
+  for k,v in pairs(self.buttons) do
+    v:draw()
+  end
 end
 
 

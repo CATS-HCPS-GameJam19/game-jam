@@ -73,7 +73,7 @@ function love.load()
   bmcount = 0
   pmcount = 0
   rmcount = 0
-  score = 100000000000000000000
+  points = 100000000000000000000
 end
 
 function love.update(dt)
@@ -104,7 +104,6 @@ function love.update(dt)
     end
 
     Talkies.update(dt)
-    -- menu:update(score)
 
     local dx = 0
     local dy = 0
@@ -278,6 +277,7 @@ function love.update(dt)
     end
 
     if onPad1 or onPad2 then
+      menu:update(points)
       onPad = true
     else
       onPad = false
@@ -335,13 +335,13 @@ function love.draw()
     love.graphics.rectangle("fill", camera.x, camera.y, love.graphics.getWidth(), love.graphics.getHeight())
   end
 
-  love.graphics.rectangle("line", rover.x+rover.w/2, rover.y+rover.h/2, rover.w, rover.h) --debug rover hitbox
-  love.graphics.setColor(1,0,0,1)
-  love.graphics.rectangle("line", hub.inx + hub.inw - 36 - 107, hub.iny + 522, 107, 75)
-  love.graphics.rectangle("line", hub.inx + hub.inw - 124 - 107, hub.iny + 431, 107, 75)
-  love.graphics.rectangle("line", hub.inx + 124, hub.iny + 431, 107, 75)
-  love.graphics.rectangle("line", hub.inx + 36, hub.iny + 522, 107, 75)
-  love.graphics.setColor(1,1,1)
+  -- love.graphics.rectangle("line", rover.x+rover.w/2, rover.y+rover.h/2, rover.w, rover.h) --debug rover hitbox
+  -- love.graphics.setColor(1,0,0,1) --hitbox debugs
+  -- love.graphics.rectangle("line", hub.inx + hub.inw - 36 - 107, hub.iny + 522, 107, 75)
+  -- love.graphics.rectangle("line", hub.inx + hub.inw - 124 - 107, hub.iny + 431, 107, 75)
+  -- love.graphics.rectangle("line", hub.inx + 124, hub.iny + 431, 107, 75)
+  -- love.graphics.rectangle("line", hub.inx + 36, hub.iny + 522, 107, 75)
+  -- love.graphics.setColor(1,1,1)
 
   camera:unset()
   if onPad then
